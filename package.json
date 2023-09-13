@@ -30,8 +30,9 @@
 	},
 	"type": "module",
 	"scripts": {
-		"build": "gbuild . && tsc",
-		"types:check": "tsc --noEmit"
+		"build": "gbuild . && tsc --emitDeclarationOnly",
+		"types:check": "tsc --noEmit",
+		"test": "pnpm types:check"
 	},
 	"bugs": {
 		"url": "https://github.com/RustedLabs/next-scroll-restoration/issues"

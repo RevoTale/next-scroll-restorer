@@ -4,7 +4,7 @@
   "compilerOptions": {
     "outDir": "dist",
     "noEmit": false,
-    "emitDeclarationOnly": true,
+    "emitDeclarationOnly": false,
   },
   "include": ["src"]
 }
