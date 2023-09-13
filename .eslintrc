@@ -1,0 +1,3 @@
+{
+  "extends": ["eslint-config-grisaia-react","eslint-config-grisaia-typescript"]
+}

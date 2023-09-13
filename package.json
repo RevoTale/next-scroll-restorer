@@ -1,0 +1,54 @@
+{
+	"author": {
+		"name": "Liakhovskyi Vladyslav",
+		"email": "vlad@rusted-labs.org",
+		"url": "https://github.com/rusted-love"
+	},
+	"version": "0.6.7",
+	"name": "next-scroll-restorer",
+	"main": "src/index.ts",
+	"license": "MIT",
+	"private": false,
+	"sideEffects": false,
+	"publishConfig": {
+		"provenance": true,
+		"access": "public",
+		"main": "index.js",
+		"directory": "dist",
+		"exports": {
+			"./package.json": "./package.json",
+			".": {
+				"import": "./index.js",
+				"require": "./index.cjs",
+				"types": "./index.d.ts"
+			}
+		}
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/RustedLabs/next-scroll-restoration.git"
+	},
+	"type": "module",
+	"scripts": {
+		"build": "gbuild . && tsc",
+		"types:check": "tsc --noEmit"
+	},
+	"bugs": {
+		"url": "https://github.com/RustedLabs/next-scroll-restoration/issues"
+	},
+	"devDependencies": {
+		"@types/react": "^18.2.21",
+		"changeset": "^0.2.6",
+		"eslint-config-grisaia-react": "^0.6.11",
+		"eslint-config-grisaia-typescript": "^0.6.11",
+		"grisaia-package-builder": "^0.1.9"
+	},
+	"peerDependencies": {
+		"next": "^13.0",
+		"react": "^17.0 || ^18.0"
+	},
+	"packageManager": "pnpm@8.7.5",
+	"dependencies": {
+		"@changesets/cli": "^2.26.2"
+	}
+}
