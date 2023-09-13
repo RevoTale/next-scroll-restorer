@@ -1,3 +1,7 @@
 {
-  "extends": ["eslint-config-grisaia-react","eslint-config-grisaia-typescript"]
+  "extends": ["eslint-config-grisaia-react","eslint-config-grisaia-typescript"],
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  },
+  "ignorePatterns": [ "**/dist/**"]
 }

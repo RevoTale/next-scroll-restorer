@@ -1,4 +1,4 @@
-import {ScrollPos} from "./types";
+import {ScrollPos} from "./types"
 
 
 export const restoreScroll = ([left,top]:ScrollPos) => {

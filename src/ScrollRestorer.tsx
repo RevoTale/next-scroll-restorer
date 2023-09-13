@@ -1,9 +1,9 @@
 'use client'
 import {usePathname, useSearchParams} from "next/navigation"
 import {useEffect, useRef, useState} from "react"
-import {restoreScroll} from "./restoreScroll";
-import {getScroll, setScroll} from "./storage";
-import {ScrollPos} from "./types";
+import {restoreScroll} from "./restoreScroll"
+import {getScroll, setScroll} from "./storage"
+import {ScrollPos} from "./types"
 
 
 const getWindowScroll = (): ScrollPos => [window.scrollX, window.scrollY]

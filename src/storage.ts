@@ -1,4 +1,4 @@
-import {ScrollPos} from "./types";
+import {ScrollPos} from "./types"
 
 const uniq = 'rusted_labs_nextjs_scroll_restoration'
 const getKey = (hash: string, pos: 'x' | 'y' ) => `${uniq}_${hash}_${pos}`

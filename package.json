@@ -32,7 +32,9 @@
 	"scripts": {
 		"build": "gbuild . && tsc --emitDeclarationOnly",
 		"types:check": "tsc --noEmit",
-		"test": "pnpm types:check"
+		"test": "pnpm types:check",
+		"lint": "eslint .",
+		"lint:fix": "eslint --fix ."
 	},
 	"bugs": {
 		"url": "https://github.com/RustedLabs/next-scroll-restoration/issues"

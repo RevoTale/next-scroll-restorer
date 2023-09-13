@@ -1,3 +1,3 @@
-import ScrollRestorer from "./ScrollRestorer";
+import ScrollRestorer from "./ScrollRestorer"
 
 export {ScrollRestorer}
