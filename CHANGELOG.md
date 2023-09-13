@@ -1,5 +1,11 @@
 # next-scroll-restorer
 
+## 0.6.11
+
+### Patch Changes
+
+- 0437a7f: fix repository naming occurrences
+
 ## 0.6.10
 
 ### Patch Changes
