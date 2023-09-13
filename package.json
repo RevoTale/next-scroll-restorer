@@ -32,6 +32,8 @@
 	"scripts": {
 		"build": "gbuild . && tsc --emitDeclarationOnly",
 		"types:check": "tsc --noEmit",
+		"changeset:version": "changeset version && git add --all",
+		"changeset:publish": "changeset publish",
 		"test": "pnpm types:check",
 		"lint": "eslint .",
 		"lint:fix": "eslint --fix ."
