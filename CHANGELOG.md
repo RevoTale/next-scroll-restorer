@@ -1,5 +1,11 @@
 # next-scroll-restorer
 
+## 0.6.10
+
+### Patch Changes
+
+- f2ece35: Fix release process
+
 ## 0.6.9
 
 ### Patch Changes
