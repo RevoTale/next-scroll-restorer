@@ -1,5 +1,11 @@
 # next-scroll-restorer
 
+## 0.6.9
+
+### Patch Changes
+
+- 9b83c24: Fix release process
+
 ## 0.6.8
 
 ### Patch Changes
