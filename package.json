@@ -34,6 +34,7 @@
 		"types:check": "tsc --noEmit",
 		"changeset:version": "changeset version && git add --all",
 		"changeset:publish": "changeset publish",
+		"prepublish": "pnpm build",
 		"test": "pnpm types:check",
 		"lint": "eslint .",
 		"lint:fix": "eslint --fix ."
