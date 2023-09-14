@@ -1,5 +1,12 @@
 # next-scroll-restorer
 
+## 0.6.13
+
+### Patch Changes
+
+- a228a70: Fix readme headings
+- 49711f2: fix bundle preparation
+
 ## 0.6.12
 
 ### Patch Changes
