@@ -1,5 +1,11 @@
 # next-scroll-restorer
 
+## 0.6.14
+
+### Patch Changes
+
+- 6985c58: Improve README
+
 ## 0.6.13
 
 ### Patch Changes
