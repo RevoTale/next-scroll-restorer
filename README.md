@@ -1,6 +1,6 @@
 # NextJs Scroll Restorer
 
-Scroll restoration for NextJs apps built with **app** directory. Fixed bugs that NextJs team does not fix.
+Scroll restoration for NextJS apps built with **app** directory. Fixed bugs that NextJS team does not fix.
 
 Important! This component is developed only for **app directory**.
 
@@ -12,6 +12,7 @@ Important! This component is developed only for **app directory**.
 ## Usage
 Import component to your root layout
 (or layout shared by (https://nextjs.org/docs/app/building-your-application/routing/route-groups)[group of routes]).
+Disable native `scrollRestoration` option in NextJS config to avoid conflicts.
 
 layout.tsx
 ```tsx
@@ -35,7 +36,7 @@ export default RootLayout
 
 ## Key features
 - 100% of codebase written in Typescript
-- Fixes bug when scroll restoration iss not immediate
-- Fixed annoying bug https://github.com/vercel/next.js/issues/53777
 - Can be used at any nesting `layout.tsx` file. Root layout isn't required.
+- Fixes bug where built-in NextJS scroll restoration is not immediate
+- Fixes annoying bug where (https://github.com/vercel/next.js/issues/53777)[scroll position forgotten by NextJS built-in scroll restoration.]
 - Zero-config
