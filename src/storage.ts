@@ -6,7 +6,6 @@ const getKey = (hash: string, pos: 'x' | 'y' ) => `${uniq}_${hash}_${pos}`
 export const setScroll = (hash: string, [x, y]: ScrollPos) => {
     x = Math.max(x,0)
     y = Math.max(y,0)
-    console.log('Remember scroll', hash, x, y)
     if (x === 0 && y === 0) {
         return
     }
