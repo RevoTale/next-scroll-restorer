@@ -1,5 +1,11 @@
 # next-scroll-restorer
 
+## 0.6.12
+
+### Patch Changes
+
+- 7500bfa: Readme guide
+
 ## 0.6.11
 
 ### Patch Changes
