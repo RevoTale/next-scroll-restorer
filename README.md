@@ -4,12 +4,12 @@ Scroll restoration for NextJs apps built with **app** directory. Fixed bugs that
 
 Important! This component is developed only for **app directory**.
 
-##Install
+## Install
 
 - `pnpm add next-scroll-restorer`  for [pnpm](https://pnpm.io)
 - `yarn add next-scroll-restorer` for [Yarn](https://yarnpkg.com)
 
-##Usage
+## Usage
 Import component to your root layout
 (or layout shared by (https://nextjs.org/docs/app/building-your-application/routing/route-groups)[group of routes]).
 
@@ -33,7 +33,7 @@ const RootLayout = ({children}) => {
 export default RootLayout
 ```
 
-##Key features
+## Key features
 - 100% of codebase written in Typescript
 - Fixes bug when scroll restoration iss not immediate
 - Fixed annoying bug https://github.com/vercel/next.js/issues/53777
