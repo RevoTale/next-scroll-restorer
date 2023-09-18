@@ -26,8 +26,8 @@ devDependencies:
     specifier: ^0.6.11
     version: 0.6.11(@typescript-eslint/eslint-plugin@6.7.0)(eslint-plugin-import@2.28.1)(eslint-plugin-jsx-a11y@6.7.1)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-react@7.33.2)(eslint@8.49.0)
   eslint-config-grisaia-typescript:
-    specifier: ^0.6.11
-    version: 0.6.11(@typescript-eslint/eslint-plugin@6.7.0)(eslint@8.49.0)
+    specifier: ^0.6.13
+    version: 0.6.13(@typescript-eslint/eslint-plugin@6.7.0)(eslint@8.49.0)
   grisaia-package-builder:
     specifier: ^0.1.12
     version: 0.1.12(esbuild@0.19.2)
@@ -1468,8 +1468,8 @@ packages:
       eslint-plugin-react-hooks: 4.6.0(eslint@8.49.0)
     dev: true
 
-  /eslint-config-grisaia-typescript@0.6.11(@typescript-eslint/eslint-plugin@6.7.0)(eslint@8.49.0):
-    resolution: {integrity: sha512-9o8CvB2rc/UQZR5KLvpd3ff1a/a0YSAk57Hl8DengMwkIHpQnsAf9ttDtJc4opcV7P98HK5XAOHoAOs2AGtvaA==}
+  /eslint-config-grisaia-typescript@0.6.13(@typescript-eslint/eslint-plugin@6.7.0)(eslint@8.49.0):
+    resolution: {integrity: sha512-8KKY3IjA3sYZj+qANK9NUpXFyNQLEBYnljIn8So+QO+bEyj3PvOQXm6aeKrAdv26HUpKABSnCp7PQwsm7kSeeg==}
     peerDependencies:
       '@typescript-eslint/eslint-plugin': ^6.6.0
       eslint: ^8.44.2
