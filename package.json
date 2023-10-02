@@ -43,7 +43,7 @@
 		"url": "https://github.com/RustedLabs/next-scroll-restorer/issues"
 	},
 	"devDependencies": {
-		"@types/react": "^18.2.22",
+		"@types/react": "^18.2.24",
 		"changeset": "^0.2.6",
 		"eslint-config-grisaia-react": "^0.6.13",
 		"eslint-config-grisaia-typescript": "^0.6.13",
