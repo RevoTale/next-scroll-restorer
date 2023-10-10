@@ -29,8 +29,8 @@ devDependencies:
     specifier: ^0.6.13
     version: 0.6.13(@typescript-eslint/eslint-plugin@6.7.0)(eslint@8.49.0)
   grisaia-package-builder:
-    specifier: ^0.1.12
-    version: 0.1.12(esbuild@0.19.2)
+    specifier: ^0.1.13
+    version: 0.1.13(esbuild@0.19.2)
 
 packages:
 
@@ -1948,8 +1948,8 @@ packages:
     resolution: {integrity: sha512-EtKwoO6kxCL9WO5xipiHTZlSzBm7WLT627TqC/uVRd0HKmq8NXyebnNYxDoBi7wt8eTWrUrKXCOVaFq9x1kgag==}
     dev: true
 
-  /grisaia-package-builder@0.1.12(esbuild@0.19.2):
-    resolution: {integrity: sha512-MYMWU2kaDade9LVvGF0RLMPo/Ia0+h0j4zysqesU20i6M7gKvIUrXVvsL6dOyvF1QyUrkZB+twcBK+O1E7IU0A==}
+  /grisaia-package-builder@0.1.13(esbuild@0.19.2):
+    resolution: {integrity: sha512-UMDPlX4JVQ+3uojj2oMpEBf9+Ff1o9xN+R9StCx4A0eKi4URooA4PEa3ej7HdP0oSC7i+5QYM9j76zjhtOeRmA==}
     hasBin: true
     peerDependencies:
       esbuild: ^0.19.2
