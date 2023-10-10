@@ -46,7 +46,7 @@
 		"@types/react": "^18.2.24",
 		"changeset": "^0.2.6",
 		"eslint-config-grisaia-react": "^0.6.14",
-		"eslint-config-grisaia-typescript": "^0.6.13",
+		"eslint-config-grisaia-typescript": "^0.6.14",
 		"grisaia-package-builder": "^0.1.12"
 	},
 	"peerDependencies": {
