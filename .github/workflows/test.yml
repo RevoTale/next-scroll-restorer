@@ -37,3 +37,9 @@ jobs:
           cache: pnpm
       - run: pnpm i
       - run: pnpm lint
+  Tests_Passed:
+    needs: [ Lint, Test ] # Replace with your actual job names
+    runs-on: ubuntu-latest
+    steps:
+      - name: Success
+        run: echo "Ready to merge!"
