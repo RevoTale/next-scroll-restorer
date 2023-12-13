@@ -1,3 +1,3 @@
 import ScrollRestorer from "./ScrollRestorer"
-
-export {ScrollRestorer}
+import useScrollRestorer from "./useScrollRestorer"
+export {ScrollRestorer,useScrollRestorer}

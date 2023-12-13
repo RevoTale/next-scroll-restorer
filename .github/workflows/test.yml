@@ -1,20 +1,19 @@
 name: Test
 on:
-  push:
-    branches: [main]
   pull_request:
+    branches:
+      - main
 permissions:
-  contents: read # to fetch code (actions/checkout)
+  contents: read
 
 jobs:
-  Tests:
+  Test:
     runs-on: ${{ matrix.os }}
     timeout-minutes: 15
     strategy:
       matrix:
-        include:
-          - node-version: 20
-            os: ubuntu-latest
+        node-version: [18, 20]
+        os: [ubuntu-latest]
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v2.4.0
@@ -22,7 +21,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: pnpm
-      - run: pnpm i --frozen-lockfile
+      - run: pnpm i
       - run: pnpm test
         env:
           CI: true
@@ -34,6 +33,13 @@ jobs:
       - uses: pnpm/action-setup@v2.4.0
       - uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
           cache: pnpm
-      - run: 'pnpm i && pnpm lint'
+      - run: pnpm i
+      - run: pnpm lint
+  Tests_Passed:
+    needs: [ Lint, Test ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Success
+        run: echo "Ready to merge!"
