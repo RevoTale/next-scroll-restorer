@@ -1,5 +1,5 @@
 'use client'
-import useScrollRestorer from "./useScrollRestorer";
+import useScrollRestorer from "./useScrollRestorer"
 
 const ScrollRestoration = () => {
     useScrollRestorer()

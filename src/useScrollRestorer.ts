@@ -1,9 +1,9 @@
-import {usePathname, useSearchParams} from "next/navigation";
-import {useEffect, useRef, useState} from "react";
-import getWindowScroll from "./getWindowScroll";
-import {restoreScroll} from "./restoreScroll";
-import {getScroll, setScroll} from "./storage";
-import {ScrollPos} from "./types";
+import {usePathname, useSearchParams} from "next/navigation"
+import {useEffect, useRef, useState} from "react"
+import getWindowScroll from "./getWindowScroll"
+import {restoreScroll} from "./restoreScroll"
+import {getScroll, setScroll} from "./storage"
+import {ScrollPos} from "./types"
 
 const useScrollRestorer = ():void=>{
 
