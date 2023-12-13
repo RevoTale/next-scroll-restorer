@@ -1,5 +1,12 @@
 # next-scroll-restorer
 
+## 0.6.15
+
+### Patch Changes
+
+- 3ef329d: Add support for NextJS 14.
+- 3ef329d: Export scroll restorer as a hook.
+
 ## 0.6.14
 
 ### Patch Changes
