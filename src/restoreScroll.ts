@@ -7,5 +7,4 @@ export const restoreScroll = ([left,top]:ScrollPos) => {
         left,
         top
     })
-    console.log(`Scroll restored to ${left} ${top}`)
 }
