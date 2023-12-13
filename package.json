@@ -4,7 +4,7 @@
 		"email": "rusted_love@revotale.com",
 		"url": "https://github.com/rusted-love"
 	},
-	"version": "0.6.14",
+	"version": "0.6.15",
 	"name": "next-scroll-restorer",
 	"main": "src/index.ts",
 	"license": "MIT",
