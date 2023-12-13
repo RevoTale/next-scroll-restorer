@@ -26,7 +26,7 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/RustedLabs/next-scroll-restorer.git"
+		"url": "git+https://github.com/RevoTale/next-scroll-restorer.git"
 	},
 	"type": "module",
 	"scripts": {
@@ -40,7 +40,7 @@
 		"lint:fix": "eslint --fix ."
 	},
 	"bugs": {
-		"url": "https://github.com/RustedLabs/next-scroll-restorer/issues"
+		"url": "https://github.com/RevoTale/next-scroll-restorer/issues"
 	},
 	"devDependencies": {
 		"@types/react": "^18.2.24",
@@ -50,7 +50,7 @@
 		"grisaia-package-builder": "^0.1.12"
 	},
 	"peerDependencies": {
-		"next": "^13.0",
+		"next": "^13.0 || ^14.0",
 		"react": "^17.0 || ^18.0"
 	},
 	"packageManager": "pnpm@8.7.5",
