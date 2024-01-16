@@ -9,7 +9,7 @@ const useScrollRestorer = (): void => {
 
     const pageHash = usePageHash()
     const isNavigatingNewPage = useRef(false)
-    const skipNextZero = useRef(false)
+    const restoreNextPageRef = useRef(true)
     const [restoreWorkaround, setRestoreWorkaround] = useState<ScrollPos | null>(null)
     useEffect(() => {
         if (restoreWorkaround) {
@@ -22,7 +22,7 @@ const useScrollRestorer = (): void => {
         const existingScroll = getScroll(pageHash) ?? [0, 0]
         if (isNavigatingNewPage.current) {
             isNavigatingNewPage.current = false
-            skipNextZero.current = true
+            restoreNextPageRef.current = false
             if (null !== existingScroll) {
                 restoreScroll(existingScroll)
                 setRestoreWorkaround(existingScroll)
@@ -48,8 +48,8 @@ const useScrollRestorer = (): void => {
             const scroll = getWindowScroll()
             const [x, y] = scroll
 
-            if (skipNextZero.current && x === 0 && y === 0) {
-                skipNextZero.current = false
+            if (restoreNextPageRef.current && x === 0 && y === 0) {
+                restoreNextPageRef.current = false //Reset next page restorer because we navigated to a new page right now
                 return
             }
             setScroll(pageHash, scroll)
