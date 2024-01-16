@@ -1,3 +1,4 @@
+import Link from 'next/link'
 const Page  = ()=>{
     return <div>
         <div style={{
@@ -5,9 +6,9 @@ const Page  = ()=>{
         }}>
             dsfsdfds
         </div>
-        <div id="testing-id">
-            Lets-go
-        </div>
+        <Link href="/low-page">
+            Lets-go to low-page
+        </Link>
     </div>
 }
 export default Page

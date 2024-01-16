@@ -1,6 +1,6 @@
 const LowPage = ()=>{
-    return <div>
-        Low page
-    </div>
+    return <h1>
+       This is the low page
+    </h1>
 }
 export default LowPage
