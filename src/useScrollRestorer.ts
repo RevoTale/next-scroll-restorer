@@ -1,17 +1,16 @@
-import {usePathname, useSearchParams} from "next/navigation"
-import {useEffect, useMemo, useRef, useState} from "react"
+import {useEffect, useRef, useState} from "react"
 import getWindowScroll from "./getWindowScroll"
 import {restoreScroll} from "./restoreScroll"
 import {getScroll, setScroll} from "./storage"
 import {ScrollPos} from "./types"
-const useScrollRestorer = ():void=>{
+import usePageHash from "./usePageHash";
 
-    const pathname = usePathname()
-    const params = useSearchParams()
-    const pageHash = useMemo(()=>`${pathname}?${params.toString()}`,[pathname,params])
+const useScrollRestorer = (): void => {
+
+    const pageHash = usePageHash()
     const isNavigatingNewPage = useRef(false)
     const skipNextZero = useRef(false)
-    const [restoreWorkaround,setRestoreWorkaround] = useState<ScrollPos|null>(null)
+    const [restoreWorkaround, setRestoreWorkaround] = useState<ScrollPos | null>(null)
     useEffect(() => {
         if (restoreWorkaround) {
             restoreScroll(restoreWorkaround)
@@ -20,8 +19,7 @@ const useScrollRestorer = ():void=>{
     useEffect(() => {
         window.history.scrollRestoration = 'manual'
 
-        const hash = `${pathname}?${params.toString()}`
-        const existingScroll = getScroll(hash)??[0,0]
+        const existingScroll = getScroll(pageHash) ?? [0, 0]
         if (isNavigatingNewPage.current) {
             isNavigatingNewPage.current = false
             skipNextZero.current = true
@@ -30,14 +28,14 @@ const useScrollRestorer = ():void=>{
                 setRestoreWorkaround(existingScroll)
             }
         }
-    }, [params, pathname])
+    }, [pageHash])
     useEffect(() => {
         const listener = () => {
             isNavigatingNewPage.current = true
         }
 
-        window.addEventListener('popstate', listener,{
-            passive:false
+        window.addEventListener('popstate', listener, {
+            passive: false
         })
         return () => {
             window.removeEventListener('popstate', listener)
@@ -46,7 +44,7 @@ const useScrollRestorer = ():void=>{
 
     useEffect(() => {
 
-        const listener =  ()=> {
+        const listener = () => {
             const scroll = getWindowScroll()
             const [x, y] = scroll
 
