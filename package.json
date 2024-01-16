@@ -35,7 +35,7 @@
     "changeset:version": "changeset version && git add --all",
     "changeset:publish": "changeset publish",
     "prepare": "pnpm build",
-    "test": "pnpm types:check",
+    "test": "pnpm types:check && playwright test",
     "lint": "eslint .",
     "lint:fix": "eslint --fix ."
   },

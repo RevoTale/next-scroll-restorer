@@ -9,7 +9,7 @@ import { defineConfig, devices } from '@playwright/test';
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
-const port = 3002;
+const port = Number(process.env.PORT)||3033;
 export default defineConfig({
   webServer: {
     command: `pnpm -C ./next-app-mock dev -- --experimental-test-proxy --port ${port}`,
