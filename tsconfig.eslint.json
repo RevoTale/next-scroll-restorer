@@ -25,8 +25,10 @@
     "noFallthroughCasesInSwitch": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
+    "outDir": "dist",
     "noEmit": false,
     "emitDeclarationOnly": false,
   },
-  "include": ["./"]
+  "include": ["./","./__tests__/**.spec.ts"],
+  "exclude": ["next-app-mock/next.config.js"]
 }

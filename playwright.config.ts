@@ -1,4 +1,4 @@
-import { defineConfig, devices } from '@playwright/test';
+import { defineConfig, devices } from '@playwright/test'
 
 /**
  * Read environment variables from file.
@@ -9,7 +9,7 @@ import { defineConfig, devices } from '@playwright/test';
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
-const port = Number(process.env.PORT)||3033;
+const port = Number(process.env.PORT)||3033
 export default defineConfig({
   webServer: {
     command: `pnpm -C ./next-app-mock build && pnpm -C ./next-app-mock start -- --experimental-test-proxy --port ${port}`,
@@ -51,4 +51,4 @@ export default defineConfig({
       use: { ...devices['Desktop Safari'] },
     },
   ],
-});
+})
