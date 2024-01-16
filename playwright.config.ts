@@ -12,7 +12,7 @@ import { defineConfig, devices } from '@playwright/test';
 const port = Number(process.env.PORT)||3033;
 export default defineConfig({
   webServer: {
-    command: `pnpm -C ./next-app-mock dev -- --experimental-test-proxy --port ${port}`,
+    command: `pnpm -C ./next-app-mock build && pnpm -C ./next-app-mock start -- --experimental-test-proxy --port ${port}`,
     port:port
   },
   use: {
@@ -28,6 +28,7 @@ export default defineConfig({
   retries: process.env.CI ? 2 : 0,
   /* Opt out of parallel tests on CI. */
   workers: process.env.CI ? 1 : undefined,
+
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: [ ['html', { open: 'never' }] ],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
