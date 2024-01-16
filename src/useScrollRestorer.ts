@@ -1,18 +1,15 @@
 import {usePathname, useSearchParams} from "next/navigation"
-import {useEffect, useRef, useState} from "react"
+import {useEffect, useMemo, useRef, useState} from "react"
 import getWindowScroll from "./getWindowScroll"
 import {restoreScroll} from "./restoreScroll"
 import {getScroll, setScroll} from "./storage"
 import {ScrollPos} from "./types"
-
 const useScrollRestorer = ():void=>{
 
     const pathname = usePathname()
-
     const params = useSearchParams()
-    const hash = useRef('')
-    hash.current = `${pathname}?${params.toString()}`
-    const isPopState = useRef(false)
+    const pageHash = useMemo(()=>`${pathname}?${params.toString()}`,[pathname,params])
+    const isNavigatingNewPage = useRef(false)
     const skipNextZero = useRef(false)
     const [restoreWorkaround,setRestoreWorkaround] = useState<ScrollPos|null>(null)
     useEffect(() => {
@@ -25,8 +22,8 @@ const useScrollRestorer = ():void=>{
 
         const hash = `${pathname}?${params.toString()}`
         const existingScroll = getScroll(hash)??[0,0]
-        if (isPopState.current) {
-            isPopState.current = false
+        if (isNavigatingNewPage.current) {
+            isNavigatingNewPage.current = false
             skipNextZero.current = true
             if (null !== existingScroll) {
                 restoreScroll(existingScroll)
@@ -36,7 +33,7 @@ const useScrollRestorer = ():void=>{
     }, [params, pathname])
     useEffect(() => {
         const listener = () => {
-            isPopState.current = true
+            isNavigatingNewPage.current = true
         }
 
         window.addEventListener('popstate', listener,{
@@ -57,7 +54,7 @@ const useScrollRestorer = ():void=>{
                 skipNextZero.current = false
                 return
             }
-            setScroll(hash.current, scroll)
+            setScroll(pageHash, scroll)
         }
 
         window.addEventListener('scroll', listener, {
@@ -66,6 +63,6 @@ const useScrollRestorer = ():void=>{
         return () => {
             window.removeEventListener('scroll', listener)
         }
-    }, [params, pathname])
+    }, [pageHash])
 }
 export default useScrollRestorer
