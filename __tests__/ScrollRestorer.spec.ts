@@ -28,8 +28,13 @@ test('End to end testing of scroll restorer', async ({page}) => {
 //A little bit of stress for app
     await page.goBack()
     expect(await getScrollY()).toBeGreaterThan(2599)
-    await page.goForward()
-    await page.goBack()
+    for (let i= 0;i<10;i++) {
+        console.log(`Navigation ${i}`)
+        await page.goForward()
+        await page.goBack()
+    }
+    expect(await getScrollY()).toBeGreaterThan(2599)
+
     await page.goForward()
 
     expect(await getScrollY()).toEqual(0)
