@@ -5,16 +5,30 @@ import {restoreScroll} from "./restoreScroll"
 import {getScroll, setScroll} from "./storage"
 import {ScrollPos} from "./types"
 import usePageHref from "./usePageHref"
-
+export type ScrollRestorerOptions = {
+    unsafeDelay?:number
+}
 const getRealHref = () => window.location.href
-const useScrollRestorer = (): void => {
+const useScrollRestorer = ({unsafeDelay}:ScrollRestorerOptions= {}): void => {
     const [scrollToRestore, setScrollToRestore] = useState<ScrollPos | null>(null)
     const appPageHref = usePageHref()
     useOnChange(() => {
         if (null !== scrollToRestore) {
-            restoreScroll(scrollToRestore)
+
             setScrollToRestore(null)
+            if (unsafeDelay) {
+                const timeout = setTimeout(()=>{
+                    restoreScroll(scrollToRestore)
+                },unsafeDelay)
+                return ()=>{
+                    clearTimeout(timeout)
+                }
+            } 
+                restoreScroll(scrollToRestore)
+
+            
         }
+        return undefined
     }, appPageHref)//Such a weird construction is important
     useEffect(() => {
         window.history.scrollRestoration = 'manual'
