@@ -1,9 +1,10 @@
 import {useEffect} from "react"
-import getWindowScroll from "./getWindowScroll"
-import {getCurrentScrollHistory, HistoryState, setCurrentScrollHistory} from "./storage"
-import {ScrollPos} from "./types"
+import {getCurrentScrollHistory, HistoryState, ScrollPos, setCurrentScrollHistory} from "./storage"
 
-const restoreScroll = ([left,top]:ScrollPos) => {
+
+const getWindowScroll = (): ScrollPos => [window.scrollX, window.scrollY]
+
+const restoreScroll = ([left, top]: ScrollPos) => {
     console.log(`Scroll restored to ${left} ${top}.`)
     window.scroll({
         behavior: 'instant',
@@ -25,19 +26,19 @@ const unmountScroll = () => {
     window.removeEventListener('scroll', rememberScroll)
 
 }
-const popstate = (e:PopStateEvent) => {
+const popstate = (e: PopStateEvent) => {
     console.log('Popstate started.')
     const scroll = getCurrentScrollHistory(e.state as HistoryState)
     if (scroll) {
         restoreScroll(scroll)
     }
 }
-const unmountPop = ()=>{
+const unmountPop = () => {
     console.log('Unmount popstate.')
 
     window.removeEventListener('popstate', popstate)
 }
-const mountPop = ()=>{
+const mountPop = () => {
     console.log('Mount popstate.')
 
     window.addEventListener('popstate', popstate)
