@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "noEmit": true,
     "module": "esnext",
     "jsx": "react-jsx",
     "target": "ESNext",
@@ -25,6 +24,11 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "resolveJsonModule": true,
-    "isolatedModules": true
+    "isolatedModules": true,
+    "outDir": "dist",
+    "noEmit": false,
+    "emitDeclarationOnly": false,
   },
+  "include": ["./","./__tests__/**.spec.ts"],
+  "exclude": ["next-app-mock/next.config.js"]
 }

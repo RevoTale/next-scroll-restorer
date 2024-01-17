@@ -1,71 +1,36 @@
-import {usePathname, useSearchParams} from "next/navigation"
-import {useEffect, useRef, useState} from "react"
+import {useOnChange} from "@bladl/react-hooks"
+import {useEffect, useState} from "react"
 import getWindowScroll from "./getWindowScroll"
 import {restoreScroll} from "./restoreScroll"
 import {getScroll, setScroll} from "./storage"
 import {ScrollPos} from "./types"
+import usePageHref from "./usePageHref"
 
-const useScrollRestorer = ():void=>{
-
-    const pathname = usePathname()
-
-    const params = useSearchParams()
-    const hash = useRef('')
-    hash.current = `${pathname}?${params.toString()}`
-    const isPopState = useRef(false)
-    const skipNextZero = useRef(false)
-    const [restoreWorkaround,setRestoreWorkaround] = useState<ScrollPos|null>(null)
-    useEffect(() => {
-        if (restoreWorkaround) {
-            restoreScroll(restoreWorkaround)
+const getRealHref = () => window.location.href
+const useScrollRestorer = (): void => {
+    const [scrollToRestore, setScrollToRestore] = useState<ScrollPos | null>(null)
+    const appPageHref = usePageHref()
+    useOnChange(() => {
+        if (null !== scrollToRestore) {
+            restoreScroll(scrollToRestore)
+            setScrollToRestore(null)
         }
-    }, [restoreWorkaround])//This is important because Next.js app dir currently does not respect lifecycle semantics
+    }, appPageHref)//Such a weird construction is important
     useEffect(() => {
         window.history.scrollRestoration = 'manual'
-
-        const hash = `${pathname}?${params.toString()}`
-        const existingScroll = getScroll(hash)??[0,0]
-        if (isPopState.current) {
-            isPopState.current = false
-            skipNextZero.current = true
-            if (null !== existingScroll) {
-                restoreScroll(existingScroll)
-                setRestoreWorkaround(existingScroll)
-            }
-        }
-    }, [params, pathname])
-    useEffect(() => {
         const listener = () => {
-            isPopState.current = true
-        }
-
-        window.addEventListener('popstate', listener,{
-            passive:false
-        })
-        return () => {
-            window.removeEventListener('popstate', listener)
-        }
-    }, [])
-
-    useEffect(() => {
-
-        const listener =  ()=> {
             const scroll = getWindowScroll()
-            const [x, y] = scroll
-
-            if (skipNextZero.current && x === 0 && y === 0) {
-                skipNextZero.current = false
-                return
-            }
-            setScroll(hash.current, scroll)
+            setScroll(window.location.href, scroll)
         }
-
-        window.addEventListener('scroll', listener, {
-            passive: false//This is IMPORTANT because passive listener does not respect synchronization and remembers the wrong state
-        })
+        const popstate = () => {
+            setScrollToRestore(getScroll(getRealHref()))
+        }
+        window.addEventListener('popstate', popstate)
+        window.addEventListener('scroll', listener)
         return () => {
+            window.removeEventListener('popstate', popstate)
             window.removeEventListener('scroll', listener)
         }
-    }, [params, pathname])
+    }, [])
 }
 export default useScrollRestorer
