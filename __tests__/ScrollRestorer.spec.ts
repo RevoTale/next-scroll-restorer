@@ -12,9 +12,9 @@ test('End to end testing of scroll restorer', async ({page}) => {
     // Find an element with the text 'About' and click on it
     const el = page.getByText('Lets-go to low-page')
     const getScrollY = () => page.evaluate((): number => window.scrollY)
-    const expectScrollToBe = async (value:number)=>{
-        await expect(getScrollY()).resolves.toBeGreaterThan(value-1.1)
-        await expect(getScrollY()).resolves.toBeLessThan(value+1.1)
+    const expectScrollToBe = async (value: number) => {
+        await expect(getScrollY()).resolves.toBeGreaterThan(value - 1.1)
+        await expect(getScrollY()).resolves.toBeLessThan(value + 1.1)
     }
     await expectScrollToBe(0)
     await el.scrollIntoViewIfNeeded()
@@ -28,14 +28,13 @@ test('End to end testing of scroll restorer', async ({page}) => {
     await expectScrollToBe(0)
     await page.goBack()
     await expect(page).toHaveURL('/')
-    await (async ()=>{
+    await (async () => {
         return new Promise(resolve => {
-            setTimeout(()=>{
-resolve(1)
-            },1000)
+            setTimeout(() => {
+                resolve(1)
+            }, 1000)
         })
-    })() //Check if nextjs does not brake scroll position later
-
+    })() //Check if Next.js does not brake scroll position later
     await expectScrollToBe(mainPage)
     await page.goForward()
     await expectScrollToBe(0)
@@ -61,7 +60,7 @@ resolve(1)
 
     const mainEl = page.getByText('Lets-go to main')
     await mainEl.scrollIntoViewIfNeeded()
-   await expectScrollToBe(highPage)
+    await expectScrollToBe(highPage)
     await mainEl.click()
     await expectScrollToBe(0)
 
@@ -69,5 +68,9 @@ resolve(1)
     await page.getByText('Lets-go to low-page').click()
     await expectScrollToBe(0)
     await page.goBack()
+    await expectScrollToBe(mainPage)
+
+    await page.reload()
+    await expectScrollToBe(mainPage)
 
 })
