@@ -1,5 +1,11 @@
 # next-scroll-restorer
 
+## 0.7.1
+
+### Patch Changes
+
+- 075cc6e: Add option to delay scroll restoration.
+
 ## 0.7.0
 
 ### Minor Changes
