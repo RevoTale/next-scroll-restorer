@@ -25,9 +25,9 @@ const unmountScroll = () => {
     window.removeEventListener('scroll', rememberScroll)
 
 }
-const popstate = () => {
+const popstate = (e:PopStateEvent) => {
     console.log('Popstate started.')
-    const scroll = getCurrentScrollHistory(window.history.state as HistoryState)
+    const scroll = getCurrentScrollHistory(e.state as HistoryState)
     if (scroll) {
         restoreScroll(scroll)
     }
@@ -44,6 +44,10 @@ const mountPop = ()=>{
 }
 const useScrollRestorer = (): void => {
     useEffect(() => {
+        const scroll = getCurrentScrollHistory(window.history.state as HistoryState)
+        if (scroll) {
+            restoreScroll(scroll)
+        }
         window.history.scrollRestoration = 'manual'
         mountPop()
         mountScroll()
