@@ -35,17 +35,12 @@ resolve(1)
             },1000)
         })
     })() //Check if nextjs does not brake scroll position later
-    console.log(
-        'vvvvvvvv'
-    )
+
     await expectScrollToBe(mainPage)
     await page.goForward()
     await expectScrollToBe(0)
 //A little bit of stress for app
     await page.goBack()
-    console.log(
-        'lllllllll'
-    )
     await expectScrollToBe(mainPage)
     for (let i = 0; i < 10; i++) {
         await page.goForward()

@@ -1,34 +1,29 @@
-import {usePathname, useSearchParams} from "next/navigation"
-import {useEffect, useRef, useState} from "react"
+import {useOnChange} from "@bladl/react-hooks"
+import {useEffect, useState} from "react"
 import getWindowScroll from "./getWindowScroll"
 import {restoreScroll} from "./restoreScroll"
 import {getScroll, setScroll} from "./storage"
 import {ScrollPos} from "./types"
 import usePageHref from "./usePageHref"
-const getRealHref = ()=>window.location.href
-const useScrollRestorer = (): void => {
-    const appPaheHref = usePageHref()
-    const isTransitioningRef = useRef<ScrollPos|null>(null)
-    useEffect(() => {
-        console.log('pathname')
-        if (null !== isTransitioningRef.current) {
-            restoreScroll(isTransitioningRef.current)
-        }
-        isTransitioningRef.current = null
 
-    }, [appPaheHref])//The transition starts with popstate and is finished when usePathname in application changed
+const getRealHref = () => window.location.href
+const useScrollRestorer = (): void => {
+    const [scrollToRestore, setScrollToRestore] = useState<ScrollPos | null>(null)
+    const appPageHref = usePageHref()
+    useOnChange(() => {
+        if (null !== scrollToRestore) {
+            restoreScroll(scrollToRestore)
+            setScrollToRestore(null)
+        }
+    }, appPageHref)//Such a weird construction is important
     useEffect(() => {
         window.history.scrollRestoration = 'manual'
         const listener = () => {
             const scroll = getWindowScroll()
-            console.log('Remember',getRealHref(),scroll.toString())
             setScroll(window.location.href, scroll)
         }
         const popstate = () => {
-            const scroll = getScroll(getRealHref())
-            console.log('popstate ',getRealHref(), scroll?.toString())
-            isTransitioningRef.current = scroll
-
+            setScrollToRestore(getScroll(getRealHref()))
         }
         window.addEventListener('popstate', popstate)
         window.addEventListener('scroll', listener)
