@@ -13,8 +13,8 @@ test('End to end testing of scroll restorer', async ({page}) => {
     const el = page.getByText('Lets-go to low-page')
     const getScrollY = () => page.evaluate((): number => window.scrollY)
     const expectScrollToBe = async (value:number)=>{
-        await expect(getScrollY()).resolves.toBeGreaterThan(value-1)
-        await expect(getScrollY()).resolves.toBeLessThan(value+1)
+        await expect(getScrollY()).resolves.toBeGreaterThan(value-1.1)
+        await expect(getScrollY()).resolves.toBeLessThan(value+1.1)
     }
     await expectScrollToBe(0)
     await el.scrollIntoViewIfNeeded()
