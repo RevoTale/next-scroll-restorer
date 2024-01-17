@@ -6,25 +6,25 @@ import usePageHref from "./usePageHref"
 
 const useScrollRestorer = (): void => {
 
-    const triggerStringForScrollRestore = usePageHref() //We rely on thing instead of 'popstate' event because seems like it fires later
+    const pageHref = usePageHref()
     useEffect(() => {
         window.history.scrollRestoration = 'manual'
-        const scroll = getScroll( window.location.href)
+        const scroll = getScroll( pageHref)
         if (null !== scroll) {
             restoreScroll(scroll)
         }
-    }, [triggerStringForScrollRestore])
+    }, [pageHref])
     useEffect(() => {
 
         const listener = () => {
             const scroll = getWindowScroll()
-            setScroll(window.location.href, scroll)
+            setScroll(pageHref, scroll)
         }
 
         window.addEventListener('scroll', listener)
         return () => {
             window.removeEventListener('scroll', listener)
         }
-    }, [])
+    }, [pageHref])
 }
 export default useScrollRestorer
