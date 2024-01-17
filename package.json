@@ -31,11 +31,11 @@
   "type": "module",
   "scripts": {
     "build": "gbuild . && tsc --emitDeclarationOnly",
-    "types:check": "tsc --noEmit",
+    "tsc": "tsc --noEmit",
     "changeset:version": "changeset version && git add --all",
     "changeset:publish": "changeset publish",
     "prepare": "pnpm build",
-    "test": "pnpm types:check && pnpm unit",
+    "test": "pnpm lint && pnpm tsc && pnpm unit",
     "unit": "playwright test",
     "lint": "eslint .",
     "lint:fix": "eslint --fix ."
@@ -44,13 +44,15 @@
     "url": "https://github.com/RevoTale/next-scroll-restorer/issues"
   },
   "devDependencies": {
-    "@playwright/test": "^1.40.1",
-    "@types/node": "^20.11.4",
-    "@types/react": "^18.2.24",
+    "@playwright/test": "^1.41.0",
+    "@types/node": "^20.11.5",
+    "@types/react": "^18.2.48",
     "changeset": "^0.2.6",
-    "eslint-config-grisaia-react": "^0.6.14",
-    "eslint-config-grisaia-typescript": "^0.6.13",
-    "grisaia-package-builder": "^0.1.12"
+    "eslint-config-grisaia-react": "^0.6.15",
+    "eslint-config-grisaia-typescript": "^0.6.14",
+    "grisaia-package-builder": "^0.1.15",
+    "@changesets/cli": "^2.27.1"
+
   },
   "peerDependencies": {
     "next": "^13.0 || ^14.0",
@@ -58,8 +60,6 @@
   },
   "packageManager": "pnpm@8.7.5",
   "dependencies": {
-    "@bladl/react-hooks": "^1.5.2",
-    "@changesets/cli": "^2.27.1",
-    "jest": "^29.7.0"
+    "@bladl/react-hooks": "^1.5.2"
   }
 }

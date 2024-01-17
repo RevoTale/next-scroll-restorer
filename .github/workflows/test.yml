@@ -7,7 +7,7 @@ on:
 permissions:
   contents: read
 jobs:
-  Test:
+  Unit:
     runs-on: ${{ matrix.os }}
     timeout-minutes: 15
     strategy:
@@ -37,8 +37,20 @@ jobs:
           cache: pnpm
       - run: pnpm i
       - run: pnpm lint
-  Tests_Passed:
-    needs: [ Lint, Test ]
+  Types:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v2.4.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+      - run: pnpm i
+      - run: pnpm tsc
+  Test:
+    needs: [ Lint, Unit, Types ]
     runs-on: ubuntu-latest
     steps:
       - name: Success
