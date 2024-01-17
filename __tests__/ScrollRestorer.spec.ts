@@ -15,7 +15,6 @@ test('End to end testing of scroll restorer', async ({page}) => {
     const expectScrollToBe = async (value:number)=>{
         await expect(getScrollY()).resolves.toBeGreaterThan(value-1)
         await expect(getScrollY()).resolves.toBeLessThan(value+1)
-
     }
     await expectScrollToBe(0)
     await el.scrollIntoViewIfNeeded()
@@ -29,13 +28,24 @@ test('End to end testing of scroll restorer', async ({page}) => {
     await expectScrollToBe(0)
     await page.goBack()
     await expect(page).toHaveURL('/')
+    await (async ()=>{
+        return new Promise(resolve => {
+            setTimeout(()=>{
+resolve(1)
+            },1000)
+        })
+    })() //Check if nextjs does not brake scroll position later
+    console.log(
+        'vvvvvvvv'
+    )
     await expectScrollToBe(mainPage)
     await page.goForward()
-
     await expectScrollToBe(0)
 //A little bit of stress for app
     await page.goBack()
-
+    console.log(
+        'lllllllll'
+    )
     await expectScrollToBe(mainPage)
     for (let i = 0; i < 10; i++) {
         await page.goForward()
