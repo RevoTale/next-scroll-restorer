@@ -1,5 +1,16 @@
 # next-scroll-restorer
 
+## 0.7.0
+
+### Minor Changes
+
+- 2d1c8a1: Make tests more complex to cover a wider range of issues. Redesign scroll restorer to pass them. Removed unnecessary complexity of scroll restorer.
+- 2d1c8a1: Add end-to-end testing of `ScrollRestorer` in real NextJS application.
+
+### Patch Changes
+
+- 2d1c8a1: Add tests that stress out scroll restorer. It showed up a bug I experienced in Safari browser with recent NextJS 14 minor versions.
+
 ## 0.6.15
 
 ### Patch Changes
