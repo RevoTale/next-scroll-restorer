@@ -1,66 +1,30 @@
-import {useEffect, useRef, useState} from "react"
+import {useEffect} from "react"
 import getWindowScroll from "./getWindowScroll"
 import {restoreScroll} from "./restoreScroll"
 import {getScroll, setScroll} from "./storage"
-import {ScrollPos} from "./types"
-import usePageHash from "./usePageHash";
+import usePageHref from "./usePageHref"
 
 const useScrollRestorer = (): void => {
 
-    const pageHash = usePageHash()
-    const isNavigatingNewPage = useRef(false)
-    const restoreNextPageRef = useRef(true)
-    const [restoreWorkaround, setRestoreWorkaround] = useState<ScrollPos | null>(null)
-    useEffect(() => {
-        if (restoreWorkaround) {
-            restoreScroll(restoreWorkaround)
-        }
-    }, [restoreWorkaround])//This is important because Next.js app dir currently does not respect lifecycle semantics
+    const triggerStringForScrollRestore = usePageHref() //We rely on thing instead of 'popstate' event because seems like it fires later
     useEffect(() => {
         window.history.scrollRestoration = 'manual'
-
-        const existingScroll = getScroll(pageHash) ?? [0, 0]
-        if (isNavigatingNewPage.current) {
-            isNavigatingNewPage.current = false
-            restoreNextPageRef.current = false
-            if (null !== existingScroll) {
-                restoreScroll(existingScroll)
-                setRestoreWorkaround(existingScroll)
-            }
+        const scroll = getScroll( window.location.href)
+        if (null !== scroll) {
+            restoreScroll(scroll)
         }
-    }, [pageHash])
-    useEffect(() => {
-        const listener = () => {
-            isNavigatingNewPage.current = true
-        }
-
-        window.addEventListener('popstate', listener, {
-            passive: false
-        })
-        return () => {
-            window.removeEventListener('popstate', listener)
-        }
-    }, [])
-
+    }, [triggerStringForScrollRestore])
     useEffect(() => {
 
         const listener = () => {
             const scroll = getWindowScroll()
-            const [x, y] = scroll
-
-            if (restoreNextPageRef.current && x === 0 && y === 0) {
-                restoreNextPageRef.current = false //Reset next page restorer because we navigated to a new page right now
-                return
-            }
-            setScroll(pageHash, scroll)
+            setScroll(window.location.href, scroll)
         }
 
-        window.addEventListener('scroll', listener, {
-            passive: false//This is IMPORTANT because passive listener does not respect synchronization and remembers the wrong state
-        })
+        window.addEventListener('scroll', listener)
         return () => {
             window.removeEventListener('scroll', listener)
         }
-    }, [pageHash])
+    }, [])
 }
 export default useScrollRestorer

@@ -1,6 +1,6 @@
-'use client'
+"use client"
 
-import {ScrollRestorer} from "../../src";
+import {ScrollRestorer} from "../../src"
 
 const ClientSideScrollRestorer = () => {
     return <ScrollRestorer />
