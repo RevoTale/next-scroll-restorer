@@ -21,9 +21,16 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: pnpm
       - run: pnpm i
+      - run: pnpm create playwright --with-deps
       - run: pnpm test
         env:
           CI: true
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30
   Lint:
     runs-on: ubuntu-latest
     timeout-minutes: 5
