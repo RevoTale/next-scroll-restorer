@@ -21,7 +21,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: pnpm
       - run: pnpm i
-      - run: pnpm create playwright --with-deps
+      - run: pnpm install playwright
       - run: pnpm test
         env:
           CI: true
