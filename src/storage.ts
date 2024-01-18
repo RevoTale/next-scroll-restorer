@@ -13,7 +13,7 @@ export const setCurrentScrollHistory = ( [x, y]: ScrollPos) => {
         [getKey('y')]: y
     }, '')
 }
-export const getCurrentScrollHistory = (state: HistoryState): ScrollPos | null => {
+export const getScrollFromState = (state: HistoryState): ScrollPos | null => {
     const retrieve = (name: 'x' | 'y') => {
 
         if (state === null) {
