@@ -1,4 +1,4 @@
-import {useEffect} from "react"
+import {useEffect, useLayoutEffect} from "react"
 import {getCurrentScrollHistory, HistoryState, ScrollPos, setCurrentScrollHistory} from "./storage"
 import usePageHref from "./usePageHref"
 
@@ -45,12 +45,28 @@ const mountPop = () => {
 
     window.addEventListener('popstate', popstate)
 }
+const restoreCurrentScroll = () => {
+    console.log('Restoring current scroll position.')
+    const scroll = getCurrentScrollHistory(window.history.state as HistoryState)
+    if (scroll) {
+        restoreScroll(scroll)
+    }
+}
 const useScrollRestorer = (): void => {
+    const appHref = usePageHref()
+
+    useLayoutEffect(() => {
+        /**
+         * This is important to run as late as possible after navigation.
+         * We could use something like `setTimeout(restoreCurrentScroll,500)`, but this is not a reactive approach.
+         * useLayoutEffect + usePageHref hook is the latest reactive thing Next.js app can provide to use.
+         * In Safari even with `window.history.scrollRestoration = 'manual'` scroll position is reset.
+         */
+        console.log(`scrollY ${window.scrollY}`)
+        restoreCurrentScroll()
+
+    }, [appHref])
     useEffect(() => {
-        const scroll = getCurrentScrollHistory(window.history.state as HistoryState)
-        if (scroll) {
-            restoreScroll(scroll)
-        }
         window.history.scrollRestoration = 'manual'
         mountPop()
         mountScroll()
