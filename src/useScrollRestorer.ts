@@ -1,5 +1,6 @@
 import {useEffect} from "react"
 import {getCurrentScrollHistory, HistoryState, ScrollPos, setCurrentScrollHistory} from "./storage"
+import usePageHref from "./usePageHref"
 
 
 const getWindowScroll = (): ScrollPos => [window.scrollX, window.scrollY]
@@ -15,7 +16,7 @@ const restoreScroll = ([left, top]: ScrollPos) => {
 
 const rememberScroll = () => {
     const scroll = getWindowScroll()
-    setCurrentScrollHistory(window.history.state as HistoryState, scroll)
+    setCurrentScrollHistory(scroll)
 }
 const mountScroll = () => {
     console.log('Scroll listener mounted.')
@@ -29,6 +30,7 @@ const unmountScroll = () => {
 const popstate = (e: PopStateEvent) => {
     console.log('Popstate started.')
     const scroll = getCurrentScrollHistory(e.state as HistoryState)
+    console.log(`Found scroll ${scroll?.toString()}.`)
     if (scroll) {
         restoreScroll(scroll)
     }
