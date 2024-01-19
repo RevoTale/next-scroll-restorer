@@ -2,7 +2,7 @@ import {useEffect, useLayoutEffect,} from "react"
 import {getScrollFromState, HistoryState, ScrollPos, setCurrentScrollHistory} from "./storage"
 import usePageHref from "./usePageHref"
 
-
+const browserInfluenceDetectorOffset = 80
 const getWindowScroll = (): ScrollPos => [window.scrollX, window.scrollY]
 
 const restoreScroll = ([left, top]: ScrollPos) => {
@@ -14,19 +14,7 @@ const restoreScroll = ([left, top]: ScrollPos) => {
     })
 }
 
-const rememberScroll = () => {
-    const scroll = getWindowScroll()
-    setCurrentScrollHistory(scroll)
-}
-const mountScroll = () => {
-    console.log('Scroll listener mounted.')
-    window.addEventListener('scroll', rememberScroll)
-}
-const unmountScroll = () => {
-    console.log('Scroll listener unmounted.')
-    window.removeEventListener('scroll', rememberScroll)
 
-}
 const popstate = (e: PopStateEvent) => {
     console.log('Popstate started.')
     console.log(e.state, window.history.state)
@@ -74,6 +62,29 @@ const useScrollRestorer = (): void => {
     }, [])*/
     useEffect(() => {
         window.history.scrollRestoration = 'manual'
+
+        const scrollListener = () => {
+            const scroll = getWindowScroll()
+            const [x,y] = scroll
+            if (x === 0 && y === 0) {
+                // Sometimes Safari scroll to the start because of weird behaviour We restore it back.
+                const [prevX,prevY] = getScrollFromState(window.history.state as HistoryState)??[0,0]
+                if ((prevX>0 || prevY>0) && (prevX>browserInfluenceDetectorOffset || prevY>browserInfluenceDetectorOffset)) {
+                    console.log('Reverting back scroll because browser tried to brake it.')
+                    restoreCurrentScroll()
+                }
+            }
+            setCurrentScrollHistory(scroll)
+        }
+        const mountScroll = () => {
+            console.log('Scroll listener mounted.')
+            window.addEventListener('scroll', scrollListener)
+        }
+        const unmountScroll = () => {
+            console.log('Scroll listener unmounted.')
+            window.removeEventListener('scroll', scrollListener)
+
+        }
         mountPop()
         mountScroll()
         return () => {
