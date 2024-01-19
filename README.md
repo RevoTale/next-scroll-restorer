@@ -1,22 +1,56 @@
 # NextJs Scroll Restorer
 
-Scroll restoration for NextJS apps built with **app** directory. Fixed bugs that NextJS team does not fix.
+Scroll restoration for Next.js apps built with **app** directory. 
+Fixed bugs that Next.js team ignored.
 
-Important! This component is developed only for **app directory**.
+**Important!** This component works only for application written with [**Next.js 'app' directory**](https://nextjs.org/docs/app).
 
 ## Install
 
 - `pnpm add next-scroll-restorer`  for [pnpm](https://pnpm.io)
 - `yarn add next-scroll-restorer` for [Yarn](https://yarnpkg.com)
 
-## Usage
-Import component to your root layout
-(or layout shared by (https://nextjs.org/docs/app/building-your-application/routing/route-groups)[group of routes]).
-Disable native `scrollRestoration` option in NextJS config to avoid conflicts.
+## Key features
+- 100% of codebase written in Typescript
+- Can be used at any nesting `layout.tsx` file. Root layout isn't required.
+- Fixed bug where built-in Next.js scroll restoration is not immediate
+- Fixed annoying bug where [scroll position forgotten by Next.js built-in scroll restoration.](https://github.com/vercel/next.js/issues/53777)
+- Extensive testing in different browsers with [Playwright](https://github.com/microsoft/playwright) testing library.
+## Presequences 
+Before you start, keep in mind following rules.
+- Keep disabled native `scrollRestoration` option in Next.js config to avoid conflicts.
+- **Skip this rule for Next.js [14.1.0](https://github.com/vercel/next.js/releases/tag/v14.1.0) and higher.** In case your Next.js version is less than [14.1.0](https://github.com/vercel/next.js/releases/tag/v14.1.0) then you should enable `windowHistorySupport` in your Next.js config under `expermimental` property.
+  [Next.js 14.1.0 enabled browser history support by default.](https://github.com/vercel/next.js/pull/60557)
+```js
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+    experimental:{
+        //Only For Next.js versions prior to 14.1.0 because it is enabled by default since version 14.1.0 
+        windowHistorySupport:true 
+    },
+}
+module.exports = nextConfig
+```
 
-layout.tsx
+
+## Usage
+
+### Step 1
+Create component named `ClientSideScrollRestorer` in your `src` directory with `useScrollRestorer` hook and `"use client"` directive to prevent server errors.
+
 ```tsx
-import {ScrollRestorer} from 'next-scroll-restorer'
+"use client"
+import {useScrollRestorer} from 'next-scroll-restorer';
+const ClientSideScrollRestorer = () => {
+    useScrollRestorer()
+    return <></>
+}
+export default ClientSideScrollRestorer
+```
+### Step 2
+Import component created in a previous step to your root layout file (layout.tsx). 
+```tsx
+import {ClientSideScrollRestorer} from '../src'
 import {ReactNode} from "react";
 
 type Props = {
@@ -26,17 +60,12 @@ const RootLayout = ({children}) => {
     return (
         <html lang="uk">
             <body>{children}</body>
-            <ScrollRestorer/>
+            <ClientSideScrollRestorer/>
         </html>
     )
 }
 
 export default RootLayout
 ```
+It can be any nesting layout shared by [group of routes](https://nextjs.org/docs/app/building-your-application/routing/route-groups) in case you do not want to enable scroll restoration for the whole application.
 
-## Key features
-- 100% of codebase written in Typescript
-- Can be used at any nesting `layout.tsx` file. Root layout isn't required.
-- Fixes bug where built-in NextJS scroll restoration is not immediate
-- Fixes annoying bug where (https://github.com/vercel/next.js/issues/53777)[scroll position forgotten by NextJS built-in scroll restoration.]
-- Zero-config
