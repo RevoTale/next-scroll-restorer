@@ -2,7 +2,7 @@ import {test, expect} from '@playwright/test'
 
 const highPage = 1300
 const mainPage = 2600
-test('End to end testing of scroll restorer', async ({page}) => {
+test('End to end testing of scroll restorer', async ({page,browserName}) => {
     // Start from the index page (the baseURL is set via the webServer in the playwright.config.ts)
     page.on('console', (msg) => {
         console.log(msg)
@@ -71,6 +71,9 @@ test('End to end testing of scroll restorer', async ({page}) => {
     await expectScrollToBe(mainPage)
 
     await page.reload()
+    if (browserName=== "firefox")  {
+        await page.goBack() //Firefox pushed new history entry history after reload https://github.com/microsoft/playwright/issues/22640
+    }
     await expectScrollToBe(mainPage)
 
 })
