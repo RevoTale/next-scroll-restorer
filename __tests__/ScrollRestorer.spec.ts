@@ -2,7 +2,7 @@ import {test, expect} from '@playwright/test'
 
 const highPage = 1300
 const mainPage = 2600
-test('End to end testing of scroll restorer', async ({page,browserName}) => {
+test('End to end testing of scroll restorer', async ({page, browserName}) => {
     // Start from the index page (the baseURL is set via the webServer in the playwright.config.ts)
     page.on('console', (msg) => {
         console.log(msg)
@@ -35,6 +35,8 @@ test('End to end testing of scroll restorer', async ({page,browserName}) => {
             }, 1000)
         })
     })() //Check if Next.js does not brake scroll position later
+
+
     await expectScrollToBe(mainPage)
     await page.goForward()
     await expectScrollToBe(0)
@@ -43,8 +45,16 @@ test('End to end testing of scroll restorer', async ({page,browserName}) => {
     await expectScrollToBe(mainPage)
     for (let i = 0; i < 10; i++) {
         await page.goForward()
+        await (async () => {
+            return new Promise(resolve => {
+                setTimeout(() => {
+                    resolve(1)
+                }, 10)
+            })
+        })()//Sometimes browsers struggle to restore the same millisecond
         await page.goBack()
     }
+
     await expectScrollToBe(mainPage)
     await page.goForward()
 
@@ -71,9 +81,16 @@ test('End to end testing of scroll restorer', async ({page,browserName}) => {
     await expectScrollToBe(mainPage)
 
     await page.reload()
-    if (browserName=== "firefox")  {
+    if (browserName === "firefox") {
         await page.goBack() //Firefox pushed new history entry history after reload https://github.com/microsoft/playwright/issues/22640
     }
+    await (async () => {
+        return new Promise(resolve => {
+            setTimeout(() => {
+                resolve(1)
+            }, 1000)
+        })
+    })()//Sometimes browsers struggle to restore the same millisecond
     await expectScrollToBe(mainPage)
 
 })

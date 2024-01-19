@@ -66,6 +66,12 @@ const useScrollRestorer = (): void => {
         console.log(`Layout effect ${window.scrollY}`)
         restoreCurrentScroll()
     }, [appHref])
+    /*useEffect(() => {
+        window.addEventListener('load',()=>{
+            console.log('Window loaded.')
+            restoreCurrentScroll()
+        })
+    }, [])*/
     useEffect(() => {
         window.history.scrollRestoration = 'manual'
         mountPop()
