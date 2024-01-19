@@ -1,5 +1,16 @@
 # next-scroll-restorer
 
+## 0.8.0
+
+### Minor Changes
+
+- 97980df: Save scroll position to window history instead of local storage.
+
+### Patch Changes
+
+- 97980df: Update README with all the latest features.
+- 97980df: Update Readme with the latest updates. Restructure to be more informative and clean.
+
 ## 0.7.1
 
 ### Patch Changes
