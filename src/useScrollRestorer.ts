@@ -33,7 +33,7 @@ const useScrollRestorer = (): void => {
          * useLayoutEffect + usePageHref hook is the latest reactive thing Next.js app can provide to use.
          * In Safari even with `window.history.scrollRestoration = 'manual'` scroll position is reset.
          */
-        console.log(`Layout effect ${window.scrollY}`)
+        console.log(`Layout effect called on ${window.scrollX} ${window.scrollY}.`)
         restoreCurrentScroll()
     }, [appHref])
 
@@ -54,7 +54,7 @@ const useScrollRestorer = (): void => {
         }
         const rememberScroll = () => {
             const [x, y] = currentScroll.current
-            console.log(`Remember scroll ${x} ${y}.`)
+            console.log(`Remember history scroll to ${x} ${y}. Href ${window.location.href}.`)
 
             if (x === 0 && y === 0) {
                 // Sometimes Safari scroll to the start because of weird behaviour We restore it back.

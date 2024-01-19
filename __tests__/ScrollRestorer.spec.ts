@@ -1,4 +1,4 @@
-import {test, expect} from '@playwright/test'
+import {test, expect,} from '@playwright/test'
 
 const highPage = 1300
 const mainPage = 2600
@@ -92,5 +92,58 @@ test('End to end testing of scroll restorer', async ({page, browserName}) => {
         })
     })()//Sometimes browsers struggle to restore the same millisecond
     await expectScrollToBe(mainPage)
+
+    //Test for a scroll to not produce any errors. https://github.com/sveltejs/kit/issues/365
+    let error: string | null = null
+    page.on("console", (msg) => {
+        if (msg.type() === 'error') {
+            error = msg.text()
+        }
+    })
+    for (let i = 0; i < 10; i++) {
+        console.log(`Iteration ${i}.`)
+
+        await page.evaluate((mainPage) => {
+            window.scrollTo({
+                top: mainPage,
+                left: 0,
+                behavior: "smooth",
+            })
+            return new Promise((resolve)=>{
+                const tinterval = setInterval(() => {
+                    if ((mainPage-2) <= window.scrollY) {
+                        // do something
+                        clearInterval(tinterval)
+                        resolve(1)
+                    }
+                }, 25)
+            })
+        },mainPage)
+        await expectScrollToBe(mainPage)
+
+        await page.evaluate(() => {
+            window.scrollTo({
+                top: 0,
+                left: 0,
+                behavior: "smooth",
+            })
+            return new Promise((resolve)=>{
+
+                const tinterval = setInterval(() => {
+
+                    if (0 === window.scrollY) {
+                        // do something
+                        clearInterval(tinterval)
+                        resolve(1)
+                    }
+                }, 25)
+            })
+        })
+        await expectScrollToBe(0)
+
+
+    }
+
+    expect(error).toBe(null)
 
 })
