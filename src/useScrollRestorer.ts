@@ -54,12 +54,6 @@ const useScrollRestorer = (): void => {
         console.log(`Layout effect ${window.scrollY}`)
         restoreCurrentScroll()
     }, [appHref])
-    /*useEffect(() => {
-        window.addEventListener('load',()=>{
-            console.log('Window loaded.')
-            restoreCurrentScroll()
-        })
-    }, [])*/
     useEffect(() => {
         window.history.scrollRestoration = 'manual'
 
@@ -68,6 +62,7 @@ const useScrollRestorer = (): void => {
             const [x,y] = scroll
             if (x === 0 && y === 0) {
                 // Sometimes Safari scroll to the start because of weird behaviour We restore it back.
+                // This case cannot be tested with Playwright, or any other testing library.
                 const [prevX,prevY] = getScrollFromState(window.history.state as HistoryState)??[0,0]
                 if ((prevX>0 || prevY>0) && (prevX>browserInfluenceDetectorOffset || prevY>browserInfluenceDetectorOffset)) {
                     console.log('Reverting back scroll because browser tried to brake it.')
