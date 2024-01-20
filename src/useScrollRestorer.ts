@@ -29,7 +29,6 @@ const useScrollRestorer = (): void => {
     const scrollMemoTimeoutRef = useRef<ReturnType<typeof setTimeout>>()
     useEffect(() => {
         window.history.scrollRestoration = 'manual'
-        const isScrollMemoAllowed = () => !lastTimeScrollRememberOnThisPageRef.current ? true : (((new Date()).getTime() - lastTimeScrollRememberOnThisPageRef.current.getTime()) > memoizationIntervalLimit)
 
         const restoreScrollFromState = (state: HistoryState) => {
             const scroll = getScrollFromState(state)
@@ -90,13 +89,15 @@ const useScrollRestorer = (): void => {
         }
 
         const cancelDelayedScrollMemoization = () => {
-            console.log(`Cancel delayed memoization.`)
 
             if (scrollMemoTimeoutRef.current) {
+                console.log(`Cancelled delayed memoization.`)
                 clearTimeout(scrollMemoTimeoutRef.current)
             }
         }
         const scrollMemoizationHandler = ()=>{
+            const isScrollMemoAllowed = () => !lastTimeScrollRememberOnThisPageRef.current ? true : (((new Date()).getTime() - lastTimeScrollRememberOnThisPageRef.current.getTime()) > memoizationIntervalLimit)
+
             const isAllowed = isScrollMemoAllowed()
             console.log(`Handle scroll event. ${isAllowed}`)
 
