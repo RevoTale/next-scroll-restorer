@@ -31,6 +31,7 @@ test('End to end testing of scroll restorer', async ({page, browserName}) => {
     await (async () => {
         return new Promise(resolve => {
             setTimeout(() => {
+                console.log('Timeout resolved.')
                 resolve(1)
             }, 1000)
         })
@@ -40,7 +41,7 @@ test('End to end testing of scroll restorer', async ({page, browserName}) => {
     await expectScrollToBe(mainPage)
     await page.goForward()
     await expectScrollToBe(0)
-//A little bit of stress for app
+    //A little bit of stress for app
     await page.goBack()
     await expectScrollToBe(mainPage)
     for (let i = 0; i < 10; i++) {
@@ -111,16 +112,16 @@ test('End to end testing of scroll restorer', async ({page, browserName}) => {
             })
 
 
-            return new Promise((resolve)=>{
+            return new Promise((resolve) => {
                 const interval = setInterval(() => {
-                    if ((mainPage-2) <= window.scrollY) {
+                    if ((mainPage - 2) <= window.scrollY) {
                         // do something
                         clearInterval(interval)
                         resolve(1)
                     }
                 }, 25)
             })
-        },mainPage)
+        }, mainPage)
         await expectScrollToBe(mainPage)
 
         await page.evaluate(() => {
@@ -129,7 +130,7 @@ test('End to end testing of scroll restorer', async ({page, browserName}) => {
                 left: 0,
                 behavior: "smooth",
             })
-            return new Promise((resolve)=>{
+            return new Promise((resolve) => {
 
                 const interval = setInterval(() => {
 

@@ -1,11 +1,10 @@
-import {useEffect, useLayoutEffect, useRef,} from "react"
+import {useEffect, useRef,} from "react"
 import {getScrollFromState, HistoryState, ScrollPos, setCurrentScrollHistory} from "./storage"
-import usePageHref from "./usePageHref"
 
-const browserInfluenceDetectorOffset = 80
 const getWindowScroll = (): ScrollPos => [window.scrollX, window.scrollY]
-const memoizationInterval = 300
-const restoreScroll = ([left, top]: ScrollPos) => {
+const memoizationIntervalLimit = 300 as const
+const scrollRestorationLimit = memoizationIntervalLimit * 2
+const scrollTo = ([left, top]: ScrollPos) => {
     console.log(`Scroll restored to ${left} ${top}.`)
     window.scroll({
         behavior: 'instant',
@@ -13,65 +12,63 @@ const restoreScroll = ([left, top]: ScrollPos) => {
         top
     })
 }
-
-
-const restoreCurrentScroll = () => {
-    const scroll = getScrollFromState(window.history.state as HistoryState)
-    console.log(`Restoring current scroll position. ${scroll?.toString()} ${window.location.href}`)
-
-    if (scroll) {
-        restoreScroll(scroll)
-    }
-}
 const useScrollRestorer = (): void => {
-    const appHref = usePageHref()
-
-    useLayoutEffect(() => {
-        /**
-         * This is important to run as late as possible after navigation.
-         * We could use something like `setTimeout(restoreCurrentScroll,500)`, but this is not a reactive approach.
-         * useLayoutEffect + usePageHref hook is the latest reactive thing Next.js app can provide to use.
-         * In Safari even with `window.history.scrollRestoration = 'manual'` scroll position is reset.
-         */
-        console.log(`Layout effect called on ${window.scrollX} ${window.scrollY}.`)
-        restoreCurrentScroll()
-    }, [appHref])
 
 
     const currentScroll = useRef<ScrollPos>([0, 0])
-    const scrollMemoizationTimeoutRef = useRef<ReturnType<typeof setTimeout>>()
-    //In Safari even with `window.history.scrollRestoration = 'manual'` scroll position is reset. It's used for workaround.
-    const popstateScrollRestored = useRef<Date|null>(null)
+
+
+    const lastTimeScrollMemoRef = useRef<Date | undefined>()
+    /**
+     * This is important to run as late as possible after navigation.
+     * We could use something like `setTimeout(restoreCurrentScroll,500)`, but this is not a reactive approach.
+     * useLayoutEffect + usePageHref hook is the latest reactive thing Next.js app can provide to use.
+     * In Safari even with `window.history.scrollRestoration = 'manual'` scroll position is reset.
+     */
+    const timePopstateRestored = useRef<Date | null>(null)
+    const scrollMemoTimeoutRef = useRef<ReturnType<typeof setTimeout>>()
     useEffect(() => {
         window.history.scrollRestoration = 'manual'
-        const popstate = (e: PopStateEvent) => {
-            cancelMemoization()
-            console.log('Popstate started.')
-            const scroll = getScrollFromState(e.state as HistoryState)
+        const isScrollRestorationAllowed = () => !timePopstateRestored.current ? true : (((new Date()).getTime() - timePopstateRestored.current.getTime()) < scrollRestorationLimit)
+        const isScrollMemoAllowed = () => !lastTimeScrollMemoRef.current ? true : (((new Date()).getTime() - lastTimeScrollMemoRef.current.getTime()) > memoizationIntervalLimit)
+
+        const restoreScrollFromState = (state: HistoryState) => {
+            timePopstateRestored.current = new Date()
+            const scroll = getScrollFromState(state)
             console.log(`Found scroll ${scroll?.toString()}. ${window.location.href}`)
             if (scroll) {
-                restoreScroll(scroll)
+                scrollTo(scroll)
             }
-            popstateScrollRestored.current = new Date()
+        }
+        const popstate = (e: PopStateEvent) => {
+            console.log('Popstate started.')
+            lastTimeScrollMemoRef.current = undefined
+            restoreScrollFromState(e.state as HistoryState)
+        }
 
+        const restoreCurrentScroll = () => {
+            console.log(`Restoring current scroll position. ${window.location.href}`)
+            restoreScrollFromState(window.history.state as HistoryState)
         }
         const rememberScroll = () => {
-
+            lastTimeScrollMemoRef.current = new Date()
+            cancelMemoTimeout()
+ 
             const [x, y] = currentScroll.current
             console.log(`Remember history scroll to ${x} ${y}. Href ${window.location.href}.`)
             if (x === 0 && y === 0) {
-                // Sometimes Safari scroll to the start because of weird behaviour We restore it back.
+                // Sometimes Safari scroll to the start because of unique behavior We restore it back.
                 // This case cannot be tested with Playwright, or any other testing library.
                 const [prevX, prevY] = getScrollFromState(window.history.state as HistoryState) ?? [0, 0]
-                if ((prevX > 0 || prevY > 0) && (prevX > browserInfluenceDetectorOffset || prevY > browserInfluenceDetectorOffset) && popstateScrollRestored.current &&  ((new Date()).getTime()-popstateScrollRestored.current.getTime())<700 ) {
-                    console.log('Reverting back scroll because browser tried to brake it.')
+                if ((prevX > 0 || prevY > 0) && isScrollRestorationAllowed()) {
+                    console.log(`Reverting back scroll because browser tried to brake it. Previous scroll ${prevX} ${prevY}.`)
+                    currentScroll.current = [prevX, prevY]
                     restoreCurrentScroll()
                     return
                 }
 
             }
-            setCurrentScrollHistory([x,y])
-            cancelMemoization()
+            setCurrentScrollHistory([x, y])
         }
         const unmountPop = () => {
             console.log('Unmount popstate.')
@@ -83,22 +80,33 @@ const useScrollRestorer = (): void => {
 
             window.addEventListener('popstate', popstate)
         }
-        const cancelMemoization = ()=>{
-            if (scrollMemoizationTimeoutRef.current) {
-                clearTimeout(scrollMemoizationTimeoutRef.current)
+
+        const cancelMemoTimeout = () => {
+            if (scrollMemoTimeoutRef.current) {
+                clearTimeout(scrollMemoTimeoutRef.current)
             }
-            scrollMemoizationTimeoutRef.current = undefined
+            scrollMemoTimeoutRef.current = undefined
         }
-
         const scrollListener = () => {
-            currentScroll.current = getWindowScroll()
+            const [x, y] = getWindowScroll()
+            currentScroll.current = [x, y]
 
-            if (scrollMemoizationTimeoutRef.current === undefined) {
-                rememberScroll()
+            console.log(`Wrote scroll to ref ${currentScroll.current[0]} ${currentScroll.current[1]}.`)
+            if (((currentScroll.current[0] - x) + (currentScroll.current[1] - y)) > 100) {
+                console.log('Workaround for instant scroll non-natural triggered by \'scrollTo\'')
+                rememberScroll() //Workaround for instant scroll non-natural triggered by 'scrollTo'
+                return
             }
-            scrollMemoizationTimeoutRef.current = setTimeout(() => {
+            if (isScrollMemoAllowed()) {
                 rememberScroll()
-            }, memoizationInterval)
+            } else {
+                console.log(`Scroll memoization is not allowed. ${window.location.href}`)
+                scrollMemoTimeoutRef.current = setTimeout(() => {
+                    rememberScroll()
+                }, memoizationIntervalLimit)
+            }
+
+
         }
         const mountScroll = () => {
             console.log('Scroll listener mounted.')
@@ -114,6 +122,7 @@ const useScrollRestorer = (): void => {
         return () => {
             unmountPop()
             unmountScroll()
+            cancelMemoTimeout()
         }
     }, [])
 }
