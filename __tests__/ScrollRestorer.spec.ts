@@ -41,8 +41,11 @@ test('End to end testing of scroll restorer', async ({page, browserName}) => {
     await expectScrollToBe(mainPage)
     await page.goForward()
     await expectScrollToBe(0)
+    console.log(await getScrollY())
     //A little bit of stress for app
     await page.goBack()
+    console.log(await getScrollY())
+
     await expectScrollToBe(mainPage)
     for (let i = 0; i < 10; i++) {
         await page.goForward()
