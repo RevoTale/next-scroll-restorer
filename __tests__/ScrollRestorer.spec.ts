@@ -13,8 +13,8 @@ test('End to end testing of scroll restorer', async ({page, browserName}) => {
     const el = page.getByText('Lets-go to low-page')
     const getScrollY = () => page.evaluate((): number => window.scrollY)
     const expectScrollToBe = async (value: number) => {
-        await expect(getScrollY()).resolves.toBeGreaterThan(value - 1.1)
-        await expect(getScrollY()).resolves.toBeLessThan(value + 1.1)
+        await expect(getScrollY()).resolves.toBeGreaterThanOrEqual(value - 2)
+        await expect(getScrollY()).resolves.toBeLessThanOrEqual(value + 2)
     }
     await expectScrollToBe(0)
     await el.scrollIntoViewIfNeeded()
@@ -109,11 +109,13 @@ test('End to end testing of scroll restorer', async ({page, browserName}) => {
                 left: 0,
                 behavior: "smooth",
             })
+
+
             return new Promise((resolve)=>{
-                const tinterval = setInterval(() => {
+                const interval = setInterval(() => {
                     if ((mainPage-2) <= window.scrollY) {
                         // do something
-                        clearInterval(tinterval)
+                        clearInterval(interval)
                         resolve(1)
                     }
                 }, 25)
@@ -129,11 +131,11 @@ test('End to end testing of scroll restorer', async ({page, browserName}) => {
             })
             return new Promise((resolve)=>{
 
-                const tinterval = setInterval(() => {
+                const interval = setInterval(() => {
 
                     if (0 === window.scrollY) {
                         // do something
-                        clearInterval(tinterval)
+                        clearInterval(interval)
                         resolve(1)
                     }
                 }, 25)

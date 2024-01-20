@@ -40,6 +40,8 @@ const useScrollRestorer = (): void => {
 
     const currentScroll = useRef<ScrollPos>([0, 0])
     const scrollMemoizationTimeoutRef = useRef<ReturnType<typeof setTimeout>>()
+    //In Safari even with `window.history.scrollRestoration = 'manual'` scroll position is reset. It's used for workaround.
+    const popstateScrollRestored = useRef<Date|null>(null)
     useEffect(() => {
         window.history.scrollRestoration = 'manual'
         const popstate = (e: PopStateEvent) => {
@@ -50,22 +52,25 @@ const useScrollRestorer = (): void => {
             if (scroll) {
                 restoreScroll(scroll)
             }
+            popstateScrollRestored.current = new Date()
 
         }
         const rememberScroll = () => {
+            cancelMemoization()
             const [x, y] = currentScroll.current
             console.log(`Remember history scroll to ${x} ${y}. Href ${window.location.href}.`)
-
             if (x === 0 && y === 0) {
                 // Sometimes Safari scroll to the start because of weird behaviour We restore it back.
                 // This case cannot be tested with Playwright, or any other testing library.
                 const [prevX, prevY] = getScrollFromState(window.history.state as HistoryState) ?? [0, 0]
-                if ((prevX > 0 || prevY > 0) && (prevX > browserInfluenceDetectorOffset || prevY > browserInfluenceDetectorOffset)) {
+                if ((prevX > 0 || prevY > 0) && (prevX > browserInfluenceDetectorOffset || prevY > browserInfluenceDetectorOffset) && popstateScrollRestored.current &&  ((new Date()).getTime()-popstateScrollRestored.current.getTime())<700 ) {
                     console.log('Reverting back scroll because browser tried to brake it.')
                     restoreCurrentScroll()
+                    return
                 }
 
             }
+
             setCurrentScrollHistory([x,y])
         }
         const unmountPop = () => {
@@ -84,15 +89,15 @@ const useScrollRestorer = (): void => {
             }
             scrollMemoizationTimeoutRef.current = undefined
         }
+
         const scrollListener = () => {
             currentScroll.current = getWindowScroll()
-            cancelMemoization()
+
             if (scrollMemoizationTimeoutRef.current === undefined) {
                 rememberScroll()
             }
             scrollMemoizationTimeoutRef.current = setTimeout(() => {
                 rememberScroll()
-                scrollMemoizationTimeoutRef.current = undefined
             }, memoizationInterval)
         }
         const mountScroll = () => {
