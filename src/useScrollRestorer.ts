@@ -17,7 +17,7 @@ const restoreScroll = ([left, top]: ScrollPos) => {
 
 const restoreCurrentScroll = () => {
     const scroll = getScrollFromState(window.history.state as HistoryState)
-    console.log(`Restoring current scroll position. ${scroll?.toString()}`)
+    console.log(`Restoring current scroll position. ${scroll?.toString()} ${window.location.href}`)
 
     if (scroll) {
         restoreScroll(scroll)
@@ -48,7 +48,7 @@ const useScrollRestorer = (): void => {
             cancelMemoization()
             console.log('Popstate started.')
             const scroll = getScrollFromState(e.state as HistoryState)
-            console.log(`Found scroll ${scroll?.toString()}.`)
+            console.log(`Found scroll ${scroll?.toString()}. ${window.location.href}`)
             if (scroll) {
                 restoreScroll(scroll)
             }
@@ -56,7 +56,7 @@ const useScrollRestorer = (): void => {
 
         }
         const rememberScroll = () => {
-            cancelMemoization()
+
             const [x, y] = currentScroll.current
             console.log(`Remember history scroll to ${x} ${y}. Href ${window.location.href}.`)
             if (x === 0 && y === 0) {
@@ -70,8 +70,8 @@ const useScrollRestorer = (): void => {
                 }
 
             }
-
             setCurrentScrollHistory([x,y])
+            cancelMemoization()
         }
         const unmountPop = () => {
             console.log('Unmount popstate.')
