@@ -107,6 +107,7 @@ const useScrollRestorer = (): void => {
                 console.log(`Scroll memoization is not allowed. ${window.location.href}`)
                 scrollMemoTimeoutRef.current = setTimeout(() => {
                     rememberScrollPosition()
+                    scrollMemoTimeoutRef.current = undefined
                 }, memoizationIntervalLimit)
             }
         }
