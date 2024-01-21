@@ -102,6 +102,7 @@ const useScrollRestorer = (): void => {
             if (scrollMemoTimeoutRef.current) {
                 console.log(`Cancelled delayed memoization.`)
                 clearTimeout(scrollMemoTimeoutRef.current)
+                scrollMemoTimeoutRef.current = undefined
             }
         }
 
@@ -121,10 +122,13 @@ const useScrollRestorer = (): void => {
                 rememberScrollPosition(pos)
             } else {
                 console.log(`Scroll memoization is not allowed. ${window.location.href}`)
-                scrollMemoTimeoutRef.current = setTimeout(() => {
-                    rememberScrollPosition(pos)
-                    scrollMemoTimeoutRef.current = undefined
-                }, memoizationIntervalLimit)
+                if (!scrollMemoTimeoutRef.current) {
+                    scrollMemoTimeoutRef.current = setTimeout(() => {
+                        rememberScrollPosition(pos)
+                        scrollMemoTimeoutRef.current = undefined
+                    }, memoizationIntervalLimit)
+                }
+
             }
         }
         const scrollListener = () => {
