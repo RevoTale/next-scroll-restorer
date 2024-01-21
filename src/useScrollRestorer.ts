@@ -1,31 +1,27 @@
 import {useEffect, useRef,} from "react"
-import {getScrollFromState, getScrollTimestamp, HistoryState, ScrollPos, setCurrentScrollHistory} from "./storage"
+import {
+    getIsNavigatingHistory, getKey, getPopstateTimestamp,
+    getScrollFromState,
+    getScrollTimestamp,
+    HistoryState,
+    ScrollPos,
+    setCurrentScrollHistory
+} from "./storage"
 
 const getWindowScroll = (): ScrollPos => [window.scrollX, window.scrollY]
 const memoizationIntervalLimit = 300 as const
 const scrollRestorationThreshold = 500 as const
-
-//
-const navThroughHistoryKey = `revotale_scroll_restorer_is_nav_through_history`
-
-const isNavigatingThroughHistory = (state: HistoryState) => state ? Boolean(state[navThroughHistoryKey]) : false
+const getState = ()=>window.history.state as HistoryState
 const useScrollRestorer = (): void => {
 
 
-    /**
-     * This is important to run as late as possible after navigation.
-     * We could use something like `setTimeout(restoreCurrentScroll,500)`, but this is not a reactive approach.
-     * useLayoutEffect + usePageHref hook is the latest reactive thing Next.js app can provide to use.
-     * In Safari even with `window.history.scrollRestoration = 'manual'` scroll position is reset.
-     */
-    const lastNavigationTime = useRef<Date>(new Date())
+
     const scrollMemoTimeoutRef = useRef<ReturnType<typeof setTimeout>>()
     useEffect(() => {
         window.history.scrollRestoration = 'manual'
 
 
         const resetContextAfterNav = () => {
-            lastNavigationTime.current = new Date()
             cancelDelayedScrollMemoization()
         }
         const restoreScrollFromState = (state: HistoryState) => {
@@ -49,21 +45,35 @@ const useScrollRestorer = (): void => {
             restoreScrollFromState(state)
             window.history.replaceState({
                 ...state,
-                [navThroughHistoryKey]: 1
+                [getKey('is_navigating_history')]: 1,
+                [getKey('popstate_timestamp')]:(new Date()).getTime()
             }, '')
         }
 
         const restoreCurrentScrollPosition = () => {
             console.log(`Restoring current scroll position. ${window.location.href}`)
-            restoreScrollFromState(window.history.state as HistoryState)
+            restoreScrollFromState(getState())
         }
+
+        /**
+         * This is important to run as late as possible after navigation.
+         * We could use something like `setTimeout(restoreCurrentScroll,500)`, but this is not a reactive approach.
+         * useLayoutEffect + usePageHref hook is the latest reactive thing Next.js app can provide to use.
+         * In Safari even with `window.history.scrollRestoration = 'manual'` scroll position is reset.
+         */
         const workaroundSafariBreaksScrollRestoration = ([x, y]: ScrollPos) => {
-            const isScrollRestorationAllowed = () => (((new Date()).getTime() - lastNavigationTime.current.getTime()) < scrollRestorationThreshold)
-            console.log(`Check workaround for safari: ${x} ${y} ${isScrollRestorationAllowed()}. Is popstate ${isNavigatingThroughHistory(window.history.state as HistoryState)}. ${window.location.href}`)
+            const isWorkaroundAllowed = () => {
+                const timeNavigated = getPopstateTimestamp(getState())
+                if (timeNavigated === null) {
+                    return false
+                }
+                return (((new Date()).getTime() -timeNavigated) < scrollRestorationThreshold)
+            }
+            console.log(`Check workaround for safari: ${x} ${y} ${isWorkaroundAllowed()}. Is popstate ${getIsNavigatingHistory(getState())}. ${window.location.href}`)
 
             // Sometimes Safari scroll to the start because of unique behavior We restore it back.
             // This case cannot be tested with Playwright, or any other testing library.
-            if (x === 0 && y === 0 && isScrollRestorationAllowed() && isNavigatingThroughHistory(window.history.state as HistoryState)) {
+            if (x === 0 && y === 0 && isWorkaroundAllowed() && getIsNavigatingHistory(getState())) {
                 console.log(`Reverting back scroll because browser tried to brake it..`)
                 restoreCurrentScrollPosition()
                 return true
@@ -97,7 +107,7 @@ const useScrollRestorer = (): void => {
 
         const scrollMemoizationHandler = (pos: ScrollPos) => {
             const isScrollMemoAllowedNow = () =>{
-                const timestamp = getScrollTimestamp((window.history.state as HistoryState))
+                const timestamp = getScrollTimestamp(getState())
                 if (null === timestamp) {
                     return true
                 }

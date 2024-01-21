@@ -1,7 +1,8 @@
 export type ScrollPos = [number, number]
 const uniq = 'revotale_nextjs_scroll_restoration' as const
-type HistoryKeys = 'x' | 'y'| 'timestamp'
-const getKey = (pos:HistoryKeys ) => `${uniq}_${pos}`
+type HistoryKeys = 'x' | 'y'| 'memo_timestamp' | 'is_navigating_history' | 'popstate_timestamp'
+
+export const getKey = (pos:HistoryKeys ) => `${uniq}_${pos}`
 export type HistoryState = Record<string, unknown> | null
 export const setCurrentScrollHistory = ( [x, y]: ScrollPos) => {
     x = Math.max(x, 0)
@@ -11,7 +12,7 @@ export const setCurrentScrollHistory = ( [x, y]: ScrollPos) => {
         ...newState,
         [getKey('x')]: x,
         [getKey('y')]: y,
-        [getKey('timestamp')]:(new Date()).getTime()
+        [getKey('memo_timestamp')]:(new Date()).getTime()
     }, '')
 }
 const retrieveNum = (name: HistoryKeys,state:HistoryState) => {
@@ -34,4 +35,6 @@ export const getScrollFromState = (state: HistoryState): ScrollPos | null => {
     const y = retrieveNum('y',state)
     return x !== null && y !== null ? [x, y] : null
 }
-export const getScrollTimestamp = (state: HistoryState):number|null=>retrieveNum('timestamp',state)
+export const getScrollTimestamp = (state: HistoryState):number|null=>retrieveNum('memo_timestamp',state)
+export const getPopstateTimestamp = (state: HistoryState):number|null=>retrieveNum('popstate_timestamp',state)
+export const getIsNavigatingHistory = (state: HistoryState):boolean=>state?Boolean(state[getKey('is_navigating_history')]):false
