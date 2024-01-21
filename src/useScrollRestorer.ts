@@ -4,15 +4,6 @@ import {getScrollFromState, HistoryState, ScrollPos, setCurrentScrollHistory} fr
 const getWindowScroll = (): ScrollPos => [window.scrollX, window.scrollY]
 const memoizationIntervalLimit = 300 as const
 const scrollRestorationThreshold = 500 as const
-const scrollTo = ([left, top]: ScrollPos) => {
-    console.log(`Scroll restored to ${left} ${top}.`)
-    window.scrollTo({
-        behavior: 'instant',
-        left,
-        top
-    })
-    console.log(`Scroll is ${window.scrollX} ${window.scrollY} after restoring.`)
-}
 
 //
 const navThroughHistoryKey = `revotale_scroll_restorer_is_nav_through_history`
@@ -42,7 +33,14 @@ const useScrollRestorer = (): void => {
             const scroll = getScrollFromState(state)
             console.log(`Found scroll ${scroll?.toString()}. ${window.location.href}`)
             if (scroll) {
-                scrollTo(scroll)
+                const [x,y] = scroll
+                console.log(`Scroll restored to ${x} ${y}.`)
+                window.scrollTo({
+                    behavior: 'instant',
+                    left:x,
+                    top:y
+                })
+                console.log(`Scroll is ${window.scrollX} ${window.scrollY} after restoring.`)
             }
         }
         const navigationListener = (e: PopStateEvent) => {
@@ -117,7 +115,7 @@ const useScrollRestorer = (): void => {
         }
         const scrollListener = () => {
 
-
+console.log('asfsfasdfdasgdsfgsdfsdfgsdf')
             cancelDelayedScrollMemoization()
             const scroll = getWindowScroll()
 
