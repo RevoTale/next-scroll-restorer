@@ -1,5 +1,5 @@
 import {useEffect, useRef,} from "react"
-import {getScrollFromState, HistoryState, ScrollPos, setCurrentScrollHistory} from "./storage"
+import {getScrollFromState, getScrollTimestamp, HistoryState, ScrollPos, setCurrentScrollHistory} from "./storage"
 
 const getWindowScroll = (): ScrollPos => [window.scrollX, window.scrollY]
 const memoizationIntervalLimit = 300 as const
@@ -7,11 +7,11 @@ const scrollRestorationThreshold = 500 as const
 
 //
 const navThroughHistoryKey = `revotale_scroll_restorer_is_nav_through_history`
+
 const isNavigatingThroughHistory = (state: HistoryState) => state ? Boolean(state[navThroughHistoryKey]) : false
 const useScrollRestorer = (): void => {
 
 
-    const lastTimeScrollRememberOnThisPageRef = useRef<Date | undefined>()
     /**
      * This is important to run as late as possible after navigation.
      * We could use something like `setTimeout(restoreCurrentScroll,500)`, but this is not a reactive approach.
@@ -27,7 +27,6 @@ const useScrollRestorer = (): void => {
         const resetContextAfterNav = () => {
             lastNavigationTime.current = new Date()
             cancelDelayedScrollMemoization()
-            lastTimeScrollRememberOnThisPageRef.current = undefined
         }
         const restoreScrollFromState = (state: HistoryState) => {
             const scroll = getScrollFromState(state)
@@ -74,7 +73,6 @@ const useScrollRestorer = (): void => {
         const rememberScrollPosition = (pos: ScrollPos) => {
             console.log(`Remember history scroll to ${pos[0]} ${pos[1]}. Href ${window.location.href}.`)
             cancelDelayedScrollMemoization()
-            lastTimeScrollRememberOnThisPageRef.current = new Date()
             setCurrentScrollHistory(pos)
         }
         const unmountNavigationListener = () => {
@@ -98,7 +96,13 @@ const useScrollRestorer = (): void => {
         }
 
         const scrollMemoizationHandler = (pos: ScrollPos) => {
-            const isScrollMemoAllowedNow = () => !lastTimeScrollRememberOnThisPageRef.current ? true : (((new Date()).getTime() - lastTimeScrollRememberOnThisPageRef.current.getTime()) > memoizationIntervalLimit)
+            const isScrollMemoAllowedNow = () =>{
+                const timestamp = getScrollTimestamp((window.history.state as HistoryState))
+                if (null === timestamp) {
+                    return true
+                }
+                return (new Date()).getTime() - timestamp > memoizationIntervalLimit
+            }
 
             const isAllowedNow = isScrollMemoAllowedNow()
             console.log(`Handle scroll event. Memo allowed: ${isAllowedNow}.`)
@@ -114,8 +118,6 @@ const useScrollRestorer = (): void => {
             }
         }
         const scrollListener = () => {
-
-console.log('asfsfasdfdasgdsfgsdfsdfgsdf')
             cancelDelayedScrollMemoization()
             const scroll = getWindowScroll()
 

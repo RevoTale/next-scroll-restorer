@@ -1,6 +1,7 @@
 export type ScrollPos = [number, number]
 const uniq = 'revotale_nextjs_scroll_restoration' as const
-const getKey = (pos: 'x' | 'y') => `${uniq}_${pos}`
+type HistoryKeys = 'x' | 'y'| 'timestamp'
+const getKey = (pos:HistoryKeys ) => `${uniq}_${pos}`
 export type HistoryState = Record<string, unknown> | null
 export const setCurrentScrollHistory = ( [x, y]: ScrollPos) => {
     x = Math.max(x, 0)
@@ -9,25 +10,28 @@ export const setCurrentScrollHistory = ( [x, y]: ScrollPos) => {
     window.history.replaceState({
         ...newState,
         [getKey('x')]: x,
-        [getKey('y')]: y
+        [getKey('y')]: y,
+        [getKey('timestamp')]:(new Date()).getTime()
     }, '')
 }
-export const getScrollFromState = (state: HistoryState): ScrollPos | null => {
-    const retrieve = (name: 'x' | 'y') => {
+const retrieveNum = (name: HistoryKeys,state:HistoryState) => {
 
-        if (state === null) {
-            return null
-        }
-        const key = getKey(name)
-        const value = state[key]
-        if (value === null) {
-            return null
-        }
-        const num = Number(value)
-        return isNaN(num) ? null : num
+    if (state === null) {
+        return null
     }
+    const key = getKey(name)
+    const value = state[key]
+    if (value === null) {
+        return null
+    }
+    const num = Number(value)
+    return isNaN(num) ? null : num
+}
+export const getScrollFromState = (state: HistoryState): ScrollPos | null => {
 
-    const x = retrieve('x')
-    const y = retrieve('y')
+
+    const x = retrieveNum('x',state)
+    const y = retrieveNum('y',state)
     return x !== null && y !== null ? [x, y] : null
 }
+export const getScrollTimestamp = (state: HistoryState):number|null=>retrieveNum('timestamp',state)
