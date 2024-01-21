@@ -6,11 +6,12 @@ const memoizationIntervalLimit = 300 as const
 const scrollRestorationThreshold = 500 as const
 const scrollTo = ([left, top]: ScrollPos) => {
     console.log(`Scroll restored to ${left} ${top}.`)
-    window.scroll({
+    window.scrollTo({
         behavior: 'instant',
         left,
         top
     })
+    console.log(`Scroll is ${window.scrollX} ${window.scrollY} after restoring.`)
 }
 
 //
@@ -31,6 +32,12 @@ const useScrollRestorer = (): void => {
     useEffect(() => {
         window.history.scrollRestoration = 'manual'
 
+
+        const resetContextAfterNav = () => {
+            lastNavigationTime.current = new Date()
+            cancelDelayedScrollMemoization()
+            lastTimeScrollRememberOnThisPageRef.current = undefined
+        }
         const restoreScrollFromState = (state: HistoryState) => {
             const scroll = getScrollFromState(state)
             console.log(`Found scroll ${scroll?.toString()}. ${window.location.href}`)
@@ -40,9 +47,7 @@ const useScrollRestorer = (): void => {
         }
         const navigationListener = (e: PopStateEvent) => {
             console.log('Popstate started.')
-            lastNavigationTime.current = new Date()
-            cancelDelayedScrollMemoization()
-            lastTimeScrollRememberOnThisPageRef.current = undefined
+            resetContextAfterNav()
             const state = e.state as HistoryState ?? {}
             restoreScrollFromState(state)
             window.history.replaceState({
@@ -57,7 +62,7 @@ const useScrollRestorer = (): void => {
         }
         const workaroundSafariBreaksScrollRestoration = ([x, y]: ScrollPos) => {
             const isScrollRestorationAllowed = () => (((new Date()).getTime() - lastNavigationTime.current.getTime()) < scrollRestorationThreshold)
-            console.log(`Check workaround for safari ${isScrollRestorationAllowed()}. Is popstate ${isNavigatingThroughHistory(window.history.state as HistoryState)}. ${window.location.href}`)
+            console.log(`Check workaround for safari: ${x} ${y} ${isScrollRestorationAllowed()}. Is popstate ${isNavigatingThroughHistory(window.history.state as HistoryState)}. ${window.location.href}`)
 
             // Sometimes Safari scroll to the start because of unique behavior We restore it back.
             // This case cannot be tested with Playwright, or any other testing library.
@@ -82,7 +87,9 @@ const useScrollRestorer = (): void => {
         const mountNavigationListener = () => {
             console.log('Mount popstate.')
 
-            window.addEventListener('popstate', navigationListener)
+            window.addEventListener('popstate', navigationListener,{
+                passive:true
+            })
         }
 
         const cancelDelayedScrollMemoization = () => {
@@ -93,12 +100,12 @@ const useScrollRestorer = (): void => {
         }
 
         const scrollMemoizationHandler = (pos: ScrollPos) => {
-            const isScrollMemoAllowed = () => !lastTimeScrollRememberOnThisPageRef.current ? true : (((new Date()).getTime() - lastTimeScrollRememberOnThisPageRef.current.getTime()) > memoizationIntervalLimit)
+            const isScrollMemoAllowedNow = () => !lastTimeScrollRememberOnThisPageRef.current ? true : (((new Date()).getTime() - lastTimeScrollRememberOnThisPageRef.current.getTime()) > memoizationIntervalLimit)
 
-            const isAllowed = isScrollMemoAllowed()
-            console.log(`Handle scroll event. Memo allowed: ${isAllowed}.`)
+            const isAllowedNow = isScrollMemoAllowedNow()
+            console.log(`Handle scroll event. Memo allowed: ${isAllowedNow}.`)
 
-            if (isAllowed) {
+            if (isAllowedNow) {
                 rememberScrollPosition(pos)
             } else {
                 console.log(`Scroll memoization is not allowed. ${window.location.href}`)
@@ -109,10 +116,12 @@ const useScrollRestorer = (): void => {
             }
         }
         const scrollListener = () => {
-            cancelDelayedScrollMemoization()
 
+
+            cancelDelayedScrollMemoization()
             const scroll = getWindowScroll()
-            console.log(`Wrote scroll to ref ${scroll.toString()}. ${window.location.href}`)
+
+            console.log(`Scroll event ${scroll.toString()}. ${window.location.href}`)
             workaroundSafariBreaksScrollRestoration(scroll)
 
             scrollMemoizationHandler(scroll)
@@ -121,7 +130,9 @@ const useScrollRestorer = (): void => {
         }
         const mountScrollListener = () => {
             console.log('Scroll listener mounted.')
-            window.addEventListener('scroll', scrollListener)
+            window.addEventListener('scroll', scrollListener,{
+                passive:true
+            })
         }
         const unmountScrollListener = () => {
             console.log('Scroll listener unmounted.')
