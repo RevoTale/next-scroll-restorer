@@ -5,7 +5,7 @@ const mainPage = 2600
 test('End to end testing of scroll restorer', async ({page, browserName}) => {
     // Start from the index page (the baseURL is set via the webServer in the playwright.config.ts)
     page.on('console', (msg) => {
-        console.log(msg)
+        console.log(`${msg.type()}: ${msg.text()}`)
     })
 
     await page.goto('/')
@@ -13,6 +13,14 @@ test('End to end testing of scroll restorer', async ({page, browserName}) => {
     const el = page.getByText('Lets-go to low-page')
     const getScrollY = () => page.evaluate((): number => window.scrollY)
     const expectScrollToBe = async (value: number) => {
+        await (async () => {
+            return new Promise(resolve => {
+                setTimeout(() => {
+                    console.log('Timeout resolved to wait dom.')
+                    resolve(1)
+                }, 25)
+            })
+        })()
         await expect(getScrollY()).resolves.toBeGreaterThanOrEqual(value - 2)
         await expect(getScrollY()).resolves.toBeLessThanOrEqual(value + 2)
     }
@@ -77,6 +85,7 @@ test('End to end testing of scroll restorer', async ({page, browserName}) => {
     await expectScrollToBe(0)
 
     await page.getByText('Lets-go to low-page').scrollIntoViewIfNeeded()
+    await expectScrollToBe(mainPage)
     await page.getByText('Lets-go to low-page').click()
     await expectScrollToBe(0)
     await page.goBack()
