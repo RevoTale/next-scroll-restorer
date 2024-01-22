@@ -71,22 +71,27 @@ const useScrollRestorer = (): void => {
          */
         const workaroundSafariBreaksScrollRestoration = ([x, y]: ScrollPos) => {
             const state = getState()
-            const isWorkaroundAllowed = (() => {
-                const timeNavigated = getPopstateTimestamp(state)
-                if (timeNavigated === null) {
-                    return false
-                }
-                return (((new Date()).getTime() - timeNavigated) < safariBugWorkaroundTimeThreshold)
-            })()
-            console.log(`Check workaround for safari: ${x} ${y} ${isWorkaroundAllowed}. Is popstate ${getIsNavigatingHistory(getState())}. ${window.location.href}`)
+
 
             // Sometimes Safari scroll to the start because of unique behavior We restore it back.
             // This case cannot be tested with Playwright, or any other testing library.
-            if (x === 0 && y === 0 && isWorkaroundAllowed && getIsNavigatingHistory(state)) {
-                console.log(`Reverting back scroll because browser tried to brake it..`)
-                restoreCurrentScrollPosition()
-                return true
+            if ((x === 0 && y === 0)) {
+                const isWorkaroundAllowed = (() => {
+                    const timeNavigated = getPopstateTimestamp(state)
+                    if (timeNavigated === null) {
+                        return false
+                    }
+                    return (((new Date()).getTime() - timeNavigated) < safariBugWorkaroundTimeThreshold)
+                })() //Place here to prevent many computations
+                const isNavHistory = getIsNavigatingHistory(state)
+                console.log(`Check workaround for safari: ${x} ${y} ${isWorkaroundAllowed}. Is popstate ${isNavHistory}. ${window.location.href}`)
+                if (isWorkaroundAllowed && isNavHistory) {
+                    console.log(`Reverting back scroll because browser tried to brake it..`)
+                    restoreCurrentScrollPosition()
+                    return true
+                }
             }
+
             return false
         }
         const rememberScrollPosition = (pos: ScrollPos) => {
@@ -127,10 +132,10 @@ const useScrollRestorer = (): void => {
 
             const isAllowedNow = isScrollMemoAllowedNow()
             console.log(`Handle scroll event. Memo allowed: ${isAllowedNow}.`)
-if (isAllowedNow) {
-    scrollMemoCountInInterval.current = 0
-}
-            if (isAllowedNow ||  scrollMemoCountInInterval.current<scrollMemoIntervalCountLimit) {
+            if (isAllowedNow) {
+                scrollMemoCountInInterval.current = 0
+            }
+            if (isAllowedNow || scrollMemoCountInInterval.current < scrollMemoIntervalCountLimit) {
                 scrollMemoCountInInterval.current++
                 rememberScrollPosition(pos)
             } else {
