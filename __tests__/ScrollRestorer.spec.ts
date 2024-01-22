@@ -2,13 +2,13 @@ import {test, expect,} from '@playwright/test'
 
 const highPage = 1300
 const mainPage = 2600
-const resolveTimeout = (time:number)=>(async () => {
-        return new Promise(resolve => {
-            setTimeout(() => {
-                resolve(1)
-            }, time)
-        })
-    })()
+const resolveTimeout = (time: number) => (async () => {
+    return new Promise(resolve => {
+        setTimeout(() => {
+            resolve(1)
+        }, time)
+    })
+})()
 test('End to end testing of scroll restorer', async ({page, browserName}) => {
     // Start from the index page (the baseURL is set via the webServer in the playwright.config.ts)
     page.on('console', (msg) => {
@@ -94,8 +94,6 @@ test('End to end testing of scroll restorer', async ({page, browserName}) => {
     await expectScrollToBe(mainPage)
 
 
-
-
     await page.reload()
     if (browserName === "firefox") {
         await page.goBack() //Firefox pushed new history entry history after reload https://github.com/microsoft/playwright/issues/22640
@@ -110,24 +108,9 @@ test('End to end testing of scroll restorer', async ({page, browserName}) => {
             error = msg.text()
         }
     })
-    //This is a very important test to stress out 'scroll' event
-    // DO NOT CHANGE THIS TEST IN ANY WAY!
-    for (let i = 0; i < 10; i++) {
-        console.log(`Iteration ${i}.`)
 
-        await page.evaluate((top) => {
-            window.scrollTo({
-                top,
-                left: 0,
-                behavior: "smooth",
-            })
-        }, mainPage)
-        await page.waitForFunction((top)=>window.scrollY===top,mainPage,{
-            timeout:5000,
-        })
-        await resolveTimeout(300) //Let browser rest
-
-        await expectScrollToBe(mainPage)
+    const smoothScrollTop = async () => {
+        console.log('Scrolling to top.')
 
         await page.evaluate(() => {
             window.scrollTo({
@@ -136,15 +119,39 @@ test('End to end testing of scroll restorer', async ({page, browserName}) => {
                 behavior: "smooth",
             })
         })
-        await resolveTimeout(500)
 
-        await page.waitForFunction(()=>{
-            return window.scrollY===0
-        },'',{
-            timeout:5000,
+        await page.waitForFunction(() => {
+            return window.scrollY === 0
+        }, '', {
+            timeout: 10000,
+            polling: 500
+
         })
         await expectScrollToBe(0)
+    }
+    const smoothScrollBottom = async () => {
+        console.log('Scrolling to bottom.')
+        await page.evaluate((top) => {
+            window.scrollTo({
+                top,
+                left: 0,
+                behavior: "smooth",
+            })
+        }, mainPage)
+        await page.waitForFunction((top) => window.scrollY >= top - 2, mainPage, {
+            timeout: 10000,
+            polling: 500
+        })
+        await resolveTimeout(300) //Let the browser rest
 
+        await expectScrollToBe(mainPage)
+    }
+    //This is a very important test to stress out 'scroll' event
+    // DO NOT CHANGE THIS TEST IN ANY WAY!
+    for (let i = 0; i < 10; i++) {
+        console.log(`Iteration ${i}.`)
+        await smoothScrollTop()
+        await smoothScrollBottom()
     }
 
     expect(error).toBe(null)
