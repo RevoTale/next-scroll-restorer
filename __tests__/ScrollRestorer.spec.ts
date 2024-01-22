@@ -122,7 +122,11 @@ test('End to end testing of scroll restorer', async ({page, browserName}) => {
                 behavior: "smooth",
             })
         }, mainPage)
-        await page.waitForFunction((top)=>window.scrollY===top,mainPage)
+        await page.waitForFunction((top)=>window.scrollY===top,mainPage,{
+            timeout:5000,
+        })
+        await resolveTimeout(300) //Let browser rest
+
         await expectScrollToBe(mainPage)
 
         await page.evaluate(() => {
@@ -132,16 +136,14 @@ test('End to end testing of scroll restorer', async ({page, browserName}) => {
                 behavior: "smooth",
             })
         })
+        await resolveTimeout(500)
+
         await page.waitForFunction(()=>{
-            console.log(window.scrollY)
             return window.scrollY===0
         },'',{
             timeout:5000,
-            polling:100
         })
-
         await expectScrollToBe(0)
-
 
     }
 
