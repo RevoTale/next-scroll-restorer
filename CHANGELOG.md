@@ -1,5 +1,11 @@
 # next-scroll-restorer
 
+## 0.9.1
+
+### Patch Changes
+
+- 8874f56: Fix Test CI to run on release merge.
+
 ## 0.9.0
 
 ### Minor Changes
