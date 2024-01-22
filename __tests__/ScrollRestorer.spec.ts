@@ -16,7 +16,6 @@ test('End to end testing of scroll restorer', async ({page, browserName}) => {
         await (async () => {
             return new Promise(resolve => {
                 setTimeout(() => {
-                    console.log('Timeout resolved to wait dom.')
                     resolve(1)
                 }, 25)
             })
