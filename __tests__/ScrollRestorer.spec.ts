@@ -110,6 +110,8 @@ test('End to end testing of scroll restorer', async ({page, browserName}) => {
             error = msg.text()
         }
     })
+    //This is a very important test to stress out 'scroll' event
+    // DO NOT CHANGE THIS TEST IN ANY WAY!
     for (let i = 0; i < 10; i++) {
         console.log(`Iteration ${i}.`)
 
@@ -142,7 +144,6 @@ test('End to end testing of scroll restorer', async ({page, browserName}) => {
             return new Promise((resolve) => {
 
                 const interval = setInterval(() => {
-
                     if (0 === window.scrollY) {
                         // do something
                         clearInterval(interval)
