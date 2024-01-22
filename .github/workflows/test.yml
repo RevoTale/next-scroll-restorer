@@ -28,7 +28,7 @@ jobs:
       - run: pnpm test
         env:
           CI: true
-      - uses: actions/upload-artifact@v3 #Use v3 because v4 does not allow multiple artifacts with the same name
+      - uses: actions/upload-artifact@v4 #Use v3 because v4 does not allow multiple artifacts with the same name
         if: always()
         with:
           name: playwright-report
