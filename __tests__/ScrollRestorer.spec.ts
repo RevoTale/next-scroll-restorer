@@ -48,7 +48,6 @@ test('End to end testing of scroll restorer', async ({page, browserName}) => {
     await expectScrollToBe(mainPage)
     for (let i = 0; i < 10; i++) {
         await page.goForward()
-        await resolveTimeout(10)//Sometimes browsers struggle to restore the same millisecond
         await page.goBack()
     }
 
@@ -108,6 +107,7 @@ test('End to end testing of scroll restorer', async ({page, browserName}) => {
             error = msg.text()
         }
     })
+    await resolveTimeout(2000) // Timeout for safari scroll bug navigation workaround.
 
     const smoothScrollTop = async () => {
         console.log('Scrolling to top.')
@@ -142,7 +142,6 @@ test('End to end testing of scroll restorer', async ({page, browserName}) => {
             timeout: 10000,
             polling: 500
         })
-        await resolveTimeout(300) //Let the browser rest
 
         await expectScrollToBe(mainPage)
     }
