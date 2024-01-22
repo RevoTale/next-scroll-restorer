@@ -1,5 +1,19 @@
 # next-scroll-restorer
 
+## 0.9.0
+
+### Minor Changes
+
+- 776dc72: Added many tests with complex cases and stress situations. In my opinion, 100% of cases in real-world browser are coveraged by tests.
+- 776dc72: Fixed broken behaviour of previous version.
+
+### Patch Changes
+
+- 776dc72: Rewritten component from scratch to match all existing tests.
+- 776dc72: More test for scroll behaviour. Test for history replaceState limitation described in https://github.com/sveltejs/kit/issues/365
+- 776dc72: Prevent error Unhandled Rejection (SecurityError): Attempt to use history.pushState() more than 100 times per 30 seconds react.
+- 776dc72: Workaround for Safari resetting scroll position.
+
 ## 0.8.0
 
 ### Minor Changes
