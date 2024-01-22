@@ -10,7 +10,7 @@ import {
 } from "./storage"
 
 const getWindowScroll = (): ScrollPos => [window.scrollX, window.scrollY]
-const memoizationIntervalLimit = 600 as const//100 times per 30 seconds
+const memoizationIntervalLimit = 700 as const//100 times per 30 seconds
 const scrollRestorationThreshold = 500 as const
 const getState = () => window.history.state as HistoryState
 const restoreScrollFromState = (state: HistoryState) => {
@@ -49,7 +49,6 @@ const useScrollRestorer = (): void => {
 
         const resetContextAfterNav = () => {
             cancelDelayedScrollMemoization()
-            scrollMemoCountInInterval.current = 0
         }
 
         const navigationListener = (e: PopStateEvent) => {
@@ -112,8 +111,8 @@ const useScrollRestorer = (): void => {
                 console.log(`Cancelled delayed memoization.`)
                 clearTimeout(scrollMemoTimeoutRef.current)
                 scrollMemoTimeoutRef.current = undefined
-                scrollMemoCountInInterval.current = 0
             }
+
         }
 
         const scrollMemoizationHandler = (pos: ScrollPos) => {
@@ -127,8 +126,10 @@ const useScrollRestorer = (): void => {
 
             const isAllowedNow = isScrollMemoAllowedNow()
             console.log(`Handle scroll event. Memo allowed: ${isAllowedNow}.`)
-
-            if (isAllowedNow ||  scrollMemoCountInInterval.current<=scrollMemoIntervalCountLimit) {
+if (isAllowedNow) {
+    scrollMemoCountInInterval.current = 0
+}
+            if (isAllowedNow ||  scrollMemoCountInInterval.current<scrollMemoIntervalCountLimit) {
                 scrollMemoCountInInterval.current++
                 rememberScrollPosition(pos)
             } else {
