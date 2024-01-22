@@ -5,7 +5,7 @@ on:
       - main
   push:
     branches:
-      - main
+      - '**'
 permissions:
   contents: read
 jobs:
