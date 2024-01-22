@@ -1,5 +1,12 @@
 # next-scroll-restorer
 
+## 0.9.2
+
+### Patch Changes
+
+- eb273a2: Update readme to use suspense
+- eb273a2: Increase threshold for Safari scroll reset bug workaround, because sometimes Safari browser fires it even after 700ms.
+
 ## 0.9.1
 
 ### Patch Changes
