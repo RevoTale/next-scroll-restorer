@@ -16,7 +16,7 @@ const RootLayout: FunctionComponent<{
     return (
         <html lang="en">
         <body className={inter.className}>
-        <Suspense fallback={<></>}><ClientSideScrollRestorer/></Suspense>
+        <Suspense><ClientSideScrollRestorer/></Suspense>
         {children}
         </body>
         </html>

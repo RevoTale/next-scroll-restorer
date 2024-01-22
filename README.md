@@ -48,10 +48,11 @@ const ClientSideScrollRestorer = () => {
 export default ClientSideScrollRestorer
 ```
 ### Step 2
-Import component created in a previous step to your root layout file (layout.tsx). 
-```tsx
+Import component created in a previous step to your root layout file (layout.tsx).
+Wrap it wih [React](https://react.dev/reference/react/Suspense) `<Suspense/>` to avoid possible [client-side deopting for entire page](https://nextjs.org/docs/messages/deopted-into-client-rendering). 
+```tsxre
 import {ClientSideScrollRestorer} from '../src'
-import {ReactNode} from "react";
+import {ReactNode, Suspense} from "react";
 
 type Props = {
     children: ReactNode
@@ -59,8 +60,10 @@ type Props = {
 const RootLayout = ({children}) => {
     return (
         <html lang="uk">
-            <body>{children}</body>
-            <ClientSideScrollRestorer/>
+        <body>{children}</body>
+            <Suspense>
+              <ClientSideScrollRestorer/>
+            </Suspense>
         </html>
     )
 }

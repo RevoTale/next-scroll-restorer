@@ -10,8 +10,8 @@ import {
 } from "./storage"
 
 const getWindowScroll = (): ScrollPos => [window.scrollX, window.scrollY]
-const memoizationIntervalLimit = 700 as const//100 times per 30 seconds
-const scrollRestorationThreshold = 500 as const
+const memoizationIntervalLimit = 601 as const//100 times per 30 seconds
+const safariBugWorkaroundTimeThreshold = 2000 as const //Safari reset scroll position to 0 0 after popstate for some reason.
 const getState = () => window.history.state as HistoryState
 const restoreScrollFromState = (state: HistoryState) => {
     const scroll = getScrollFromState(state)
@@ -70,22 +70,28 @@ const useScrollRestorer = (): void => {
          * In Safari even with `window.history.scrollRestoration = 'manual'` scroll position is reset.
          */
         const workaroundSafariBreaksScrollRestoration = ([x, y]: ScrollPos) => {
-            const isWorkaroundAllowed = () => {
-                const timeNavigated = getPopstateTimestamp(getState())
-                if (timeNavigated === null) {
-                    return false
-                }
-                return (((new Date()).getTime() - timeNavigated) < scrollRestorationThreshold)
-            }
-            console.log(`Check workaround for safari: ${x} ${y} ${isWorkaroundAllowed()}. Is popstate ${getIsNavigatingHistory(getState())}. ${window.location.href}`)
+            const state = getState()
+
 
             // Sometimes Safari scroll to the start because of unique behavior We restore it back.
             // This case cannot be tested with Playwright, or any other testing library.
-            if (x === 0 && y === 0 && isWorkaroundAllowed() && getIsNavigatingHistory(getState())) {
-                console.log(`Reverting back scroll because browser tried to brake it..`)
-                restoreCurrentScrollPosition()
-                return true
+            if ((x === 0 && y === 0)) {
+                const isWorkaroundAllowed = (() => {
+                    const timeNavigated = getPopstateTimestamp(state)
+                    if (timeNavigated === null) {
+                        return false
+                    }
+                    return (((new Date()).getTime() - timeNavigated) < safariBugWorkaroundTimeThreshold)
+                })() //Place here to prevent many computations
+                const isNavHistory = getIsNavigatingHistory(state)
+                console.log(`Check workaround for safari: ${x} ${y} ${isWorkaroundAllowed}. Is popstate ${isNavHistory}. ${window.location.href}`)
+                if (isWorkaroundAllowed && isNavHistory) {
+                    console.log(`Reverting back scroll because browser tried to brake it..`)
+                    restoreCurrentScrollPosition()
+                    return true
+                }
             }
+
             return false
         }
         const rememberScrollPosition = (pos: ScrollPos) => {
@@ -126,10 +132,10 @@ const useScrollRestorer = (): void => {
 
             const isAllowedNow = isScrollMemoAllowedNow()
             console.log(`Handle scroll event. Memo allowed: ${isAllowedNow}.`)
-if (isAllowedNow) {
-    scrollMemoCountInInterval.current = 0
-}
-            if (isAllowedNow ||  scrollMemoCountInInterval.current<scrollMemoIntervalCountLimit) {
+            if (isAllowedNow) {
+                scrollMemoCountInInterval.current = 0
+            }
+            if (isAllowedNow || scrollMemoCountInInterval.current < scrollMemoIntervalCountLimit) {
                 scrollMemoCountInInterval.current++
                 rememberScrollPosition(pos)
             } else {
