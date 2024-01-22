@@ -70,18 +70,19 @@ const useScrollRestorer = (): void => {
          * In Safari even with `window.history.scrollRestoration = 'manual'` scroll position is reset.
          */
         const workaroundSafariBreaksScrollRestoration = ([x, y]: ScrollPos) => {
-            const isWorkaroundAllowed = () => {
-                const timeNavigated = getPopstateTimestamp(getState())
+            const state = getState()
+            const isWorkaroundAllowed = (() => {
+                const timeNavigated = getPopstateTimestamp(state)
                 if (timeNavigated === null) {
                     return false
                 }
                 return (((new Date()).getTime() - timeNavigated) < safariBugWorkaroundTimeThreshold)
-            }
-            console.log(`Check workaround for safari: ${x} ${y} ${isWorkaroundAllowed()}. Is popstate ${getIsNavigatingHistory(getState())}. ${window.location.href}`)
+            })()
+            console.log(`Check workaround for safari: ${x} ${y} ${isWorkaroundAllowed}. Is popstate ${getIsNavigatingHistory(getState())}. ${window.location.href}`)
 
             // Sometimes Safari scroll to the start because of unique behavior We restore it back.
             // This case cannot be tested with Playwright, or any other testing library.
-            if (x === 0 && y === 0 && isWorkaroundAllowed() && getIsNavigatingHistory(getState())) {
+            if (x === 0 && y === 0 && isWorkaroundAllowed && getIsNavigatingHistory(state)) {
                 console.log(`Reverting back scroll because browser tried to brake it..`)
                 restoreCurrentScrollPosition()
                 return true
