@@ -1,5 +1,5 @@
 import {usePathname, useSearchParams} from "next/navigation"
-import {useEffect, useLayoutEffect, useRef, useState,} from "react"
+import {useEffect, useLayoutEffect, useRef,} from "react"
 import {
     getIsNavigatingHistory, getKey, getPopstateTimestamp,
     getScrollFromState,
@@ -10,7 +10,7 @@ import {
 } from "./storage"
 
 const getWindowScroll = (): ScrollPos => [window.scrollX, window.scrollY]
-const memoizationIntervalLimit = 300 as const
+const memoizationIntervalLimit = 600 as const//100 times per 30 seconds
 const scrollRestorationThreshold = 500 as const
 const getState = () => window.history.state as HistoryState
 const restoreScrollFromState = (state: HistoryState) => {
@@ -27,6 +27,7 @@ const restoreScrollFromState = (state: HistoryState) => {
         console.log(`Scroll is ${window.scrollX} ${window.scrollY} after restoring. ${window.innerHeight}`)
     }
 }
+const scrollMemoIntervalCountLimit = 2 as const
 const restoreCurrentScrollPosition = () => {
     console.log(`Restoring current scroll position. ${window.location.href}`)
     restoreScrollFromState(getState())
@@ -41,11 +42,14 @@ const useScrollRestorer = (): void => {
         restoreCurrentScrollPosition()
     }, [pathname, searchparams])
     const scrollMemoTimeoutRef = useRef<ReturnType<typeof setTimeout>>()
+    const scrollMemoCountInInterval = useRef<number>(0)//Used to workaround instant scrollTo() calls.It's used to work around immediate scroll in tests and possible real world behaviour.
+
     useEffect(() => {
         window.history.scrollRestoration = 'manual'
 
         const resetContextAfterNav = () => {
             cancelDelayedScrollMemoization()
+            scrollMemoCountInInterval.current = 0
         }
 
         const navigationListener = (e: PopStateEvent) => {
@@ -108,6 +112,7 @@ const useScrollRestorer = (): void => {
                 console.log(`Cancelled delayed memoization.`)
                 clearTimeout(scrollMemoTimeoutRef.current)
                 scrollMemoTimeoutRef.current = undefined
+                scrollMemoCountInInterval.current = 0
             }
         }
 
@@ -123,7 +128,8 @@ const useScrollRestorer = (): void => {
             const isAllowedNow = isScrollMemoAllowedNow()
             console.log(`Handle scroll event. Memo allowed: ${isAllowedNow}.`)
 
-            if (isAllowedNow) {
+            if (isAllowedNow ||  scrollMemoCountInInterval.current<=scrollMemoIntervalCountLimit) {
+                scrollMemoCountInInterval.current++
                 rememberScrollPosition(pos)
             } else {
                 console.log(`Scroll memoization is not allowed. ${window.location.href}`)
@@ -131,6 +137,7 @@ const useScrollRestorer = (): void => {
                     console.log(`Set delayed memoization ${pos[0]} ${pos[1]}`)
                     scrollMemoTimeoutRef.current = setTimeout(() => {
                         rememberScrollPosition(pos)
+                        scrollMemoCountInInterval.current = 0
                         scrollMemoTimeoutRef.current = undefined
                     }, memoizationIntervalLimit)
                 }
