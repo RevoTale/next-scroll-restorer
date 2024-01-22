@@ -2,6 +2,13 @@ import {test, expect,} from '@playwright/test'
 
 const highPage = 1300
 const mainPage = 2600
+const resolveTimeout = (time:number)=>(async () => {
+        return new Promise(resolve => {
+            setTimeout(() => {
+                resolve(1)
+            }, time)
+        })
+    })()
 test('End to end testing of scroll restorer', async ({page, browserName}) => {
     // Start from the index page (the baseURL is set via the webServer in the playwright.config.ts)
     page.on('console', (msg) => {
@@ -13,13 +20,7 @@ test('End to end testing of scroll restorer', async ({page, browserName}) => {
     const el = page.getByText('Lets-go to low-page')
     const getScrollY = () => page.evaluate((): number => window.scrollY)
     const expectScrollToBe = async (value: number) => {
-        await (async () => {
-            return new Promise(resolve => {
-                setTimeout(() => {
-                    resolve(1)
-                }, 25)
-            })
-        })()
+        await resolveTimeout(25)
         await expect(getScrollY()).resolves.toBeGreaterThanOrEqual(value - 2)
         await expect(getScrollY()).resolves.toBeLessThanOrEqual(value + 2)
     }
@@ -35,14 +36,7 @@ test('End to end testing of scroll restorer', async ({page, browserName}) => {
     await expectScrollToBe(0)
     await page.goBack()
     await expect(page).toHaveURL('/')
-    await (async () => {
-        return new Promise(resolve => {
-            setTimeout(() => {
-                console.log('Timeout resolved.')
-                resolve(1)
-            }, 1000)
-        })
-    })() //Check if Next.js does not brake scroll position later
+    await resolveTimeout(1000) //Check if Next.js does not brake scroll position later
 
 
     await expectScrollToBe(mainPage)
@@ -54,13 +48,7 @@ test('End to end testing of scroll restorer', async ({page, browserName}) => {
     await expectScrollToBe(mainPage)
     for (let i = 0; i < 10; i++) {
         await page.goForward()
-        await (async () => {
-            return new Promise(resolve => {
-                setTimeout(() => {
-                    resolve(1)
-                }, 10)
-            })
-        })()//Sometimes browsers struggle to restore the same millisecond
+        await resolveTimeout(10)//Sometimes browsers struggle to restore the same millisecond
         await page.goBack()
     }
 
@@ -112,13 +100,7 @@ test('End to end testing of scroll restorer', async ({page, browserName}) => {
     if (browserName === "firefox") {
         await page.goBack() //Firefox pushed new history entry history after reload https://github.com/microsoft/playwright/issues/22640
     }
-    await (async () => {
-        return new Promise(resolve => {
-            setTimeout(() => {
-                resolve(1)
-            }, 1000)
-        })
-    })()//Sometimes browsers struggle to restore the same millisecond
+    await resolveTimeout(1000)//Sometimes browsers struggle to restore the same millisecond
     await expectScrollToBe(mainPage)
 
     //Test for a scroll to not produce any errors. https://github.com/sveltejs/kit/issues/365
