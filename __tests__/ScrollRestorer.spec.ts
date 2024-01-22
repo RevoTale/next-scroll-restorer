@@ -130,7 +130,7 @@ test('End to end testing of scroll restorer', async ({page, browserName}) => {
                         clearInterval(interval)
                         resolve(1)
                     }
-                }, 25)
+                }, 200)
             })
         }, mainPage)
         await expectScrollToBe(mainPage)
@@ -144,12 +144,13 @@ test('End to end testing of scroll restorer', async ({page, browserName}) => {
             return new Promise((resolve) => {
 
                 const interval = setInterval(() => {
+                    console.log( window.scrollY)
                     if (0 === window.scrollY) {
                         // do something
                         clearInterval(interval)
                         resolve(1)
                     }
-                }, 90)
+                }, 200)
             })
         })
         await expectScrollToBe(0)
