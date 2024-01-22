@@ -80,16 +80,34 @@ test('End to end testing of scroll restorer', async ({page, browserName}) => {
 
     const mainEl = page.getByText('Lets-go to main')
     await mainEl.scrollIntoViewIfNeeded()
+    await page.waitForURL('/high')
     await expectScrollToBe(highPage)
     await mainEl.click()
     await expectScrollToBe(0)
+    await page.waitForURL('/')
+
 
     await page.getByText('Lets-go to low-page').scrollIntoViewIfNeeded()
     await expectScrollToBe(mainPage)
+
     await page.getByText('Lets-go to low-page').click()
+
     await expectScrollToBe(0)
+    await page.waitForURL('/low-page')
+
     await page.goBack()
+
     await expectScrollToBe(mainPage)
+    await page.waitForURL('/')
+    await page.goBack()
+    await expectScrollToBe(highPage)
+    await page.waitForURL('/high')
+    await page.goForward()
+    await page.waitForURL('/')
+    await expectScrollToBe(mainPage)
+
+
+
 
     await page.reload()
     if (browserName === "firefox") {
