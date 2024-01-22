@@ -11,7 +11,7 @@ import {
 
 const getWindowScroll = (): ScrollPos => [window.scrollX, window.scrollY]
 const memoizationIntervalLimit = 700 as const//100 times per 30 seconds
-const scrollRestorationThreshold = 500 as const
+const safariBugWorkaroundTimeThreshold = 2000 as const //Safari reset scroll position to 0 0 after popstate for some reason.
 const getState = () => window.history.state as HistoryState
 const restoreScrollFromState = (state: HistoryState) => {
     const scroll = getScrollFromState(state)
@@ -75,7 +75,7 @@ const useScrollRestorer = (): void => {
                 if (timeNavigated === null) {
                     return false
                 }
-                return (((new Date()).getTime() - timeNavigated) < scrollRestorationThreshold)
+                return (((new Date()).getTime() - timeNavigated) < safariBugWorkaroundTimeThreshold)
             }
             console.log(`Check workaround for safari: ${x} ${y} ${isWorkaroundAllowed()}. Is popstate ${getIsNavigatingHistory(getState())}. ${window.location.href}`)
 
