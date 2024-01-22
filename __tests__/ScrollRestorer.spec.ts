@@ -17,10 +17,7 @@ const expectScrollToBe = async (page:Page,value: number) => {
     await expect(getScrollY(page)).resolves.toBeLessThanOrEqual(value + 2)
 }
 const initTests = async (page:Page)=>{
-    // Start from the index page (the baseURL is set via the webServer in the playwright.config.ts)
-    page.on('console', (msg) => {
-        console.log(`${msg.type()}: ${msg.text()}`)
-    })
+
     await page.goto('/')
     // Default behavior to start.
     const el = page.getByText('Lets-go to low-page')
@@ -130,7 +127,6 @@ test('Smooth scrolling',async ({page}) => {
             return window.scrollY === 0
         }, '', {
             timeout: 10000,
-            polling: 500
 
         })
         await expectScrollToBe(page,0)
@@ -146,7 +142,6 @@ test('Smooth scrolling',async ({page}) => {
         }, mainPage)
         await page.waitForFunction((top) => window.scrollY >= top - 2, mainPage, {
             timeout: 10000,
-            polling: 500
         })
 
         await expectScrollToBe(page,mainPage)
