@@ -149,7 +149,7 @@ test('End to end testing of scroll restorer', async ({page, browserName}) => {
                         clearInterval(interval)
                         resolve(1)
                     }
-                }, 25)
+                }, 90)
             })
         })
         await expectScrollToBe(0)
