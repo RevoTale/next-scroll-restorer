@@ -20,7 +20,7 @@ test('End to end testing of scroll restorer', async ({page, browserName}) => {
     const el = page.getByText('Lets-go to low-page')
     const getScrollY = () => page.evaluate((): number => window.scrollY)
     const expectScrollToBe = async (value: number) => {
-        await resolveTimeout(25)
+        await resolveTimeout(50)
         await expect(getScrollY()).resolves.toBeGreaterThanOrEqual(value - 2)
         await expect(getScrollY()).resolves.toBeLessThanOrEqual(value + 2)
     }
@@ -48,6 +48,7 @@ test('End to end testing of scroll restorer', async ({page, browserName}) => {
     await expectScrollToBe(mainPage)
     for (let i = 0; i < 10; i++) {
         await page.goForward()
+        await resolveTimeout(10)//Sometimes browsers struggle to restore the same millisecond
         await page.goBack()
     }
 
