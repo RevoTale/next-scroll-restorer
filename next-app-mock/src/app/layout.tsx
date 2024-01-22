@@ -2,7 +2,7 @@ import ClientSideScrollRestorer from "@/ClientSideScrollRestorer"
 import type {Metadata} from 'next'
 import {Inter} from 'next/font/google'
 import './globals.css'
-import {FunctionComponent, ReactNode} from "react"
+import {FunctionComponent, ReactNode, Suspense} from "react"
 
 const inter = Inter({subsets: ['latin']})
 
@@ -16,7 +16,7 @@ const RootLayout: FunctionComponent<{
     return (
         <html lang="en">
         <body className={inter.className}>
-        <ClientSideScrollRestorer/>
+        <Suspense fallback={<></>}><ClientSideScrollRestorer/></Suspense>
         {children}
         </body>
         </html>
