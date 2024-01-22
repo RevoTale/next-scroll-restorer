@@ -1,3 +1,4 @@
+import {usePathname, useSearchParams} from "next/navigation"
 import {useEffect, useLayoutEffect, useRef, useState,} from "react"
 import {
     getIsNavigatingHistory, getKey, getPopstateTimestamp,
@@ -12,43 +13,45 @@ const getWindowScroll = (): ScrollPos => [window.scrollX, window.scrollY]
 const memoizationIntervalLimit = 300 as const
 const scrollRestorationThreshold = 500 as const
 const getState = () => window.history.state as HistoryState
+const restoreScrollFromState = (state: HistoryState) => {
+    const scroll = getScrollFromState(state)
+    console.log(`Found scroll ${scroll?.toString()}. ${window.location.href}`)
+    if (scroll) {
+        const [x, y] = scroll
+        console.log(`Scroll restored to ${x} ${y}. Document height ${window.document.body.clientHeight}.`)
+        window.scrollTo({
+            behavior: 'instant',
+            left: x,
+            top: y
+        })
+        console.log(`Scroll is ${window.scrollX} ${window.scrollY} after restoring. ${window.innerHeight}`)
+    }
+}
+const restoreCurrentScrollPosition = () => {
+    console.log(`Restoring current scroll position. ${window.location.href}`)
+    restoreScrollFromState(getState())
+}
 const useScrollRestorer = (): void => {
+    const pathname = usePathname()
+    const searchparams = useSearchParams()
 
-    const [restoreX2, setRestoreX2] = useState<null | (() => void)>(null)
+
     useLayoutEffect(() => {
-        if (restoreX2) {
-            console.log('Restoring scroll second time.')
-            restoreX2()
-            setRestoreX2(null)
-        }
-    }, [restoreX2])
+        console.log('Restoring based on hooks.')
+        restoreCurrentScrollPosition()
+    }, [pathname, searchparams])
     const scrollMemoTimeoutRef = useRef<ReturnType<typeof setTimeout>>()
     useEffect(() => {
         window.history.scrollRestoration = 'manual'
 
-
         const resetContextAfterNav = () => {
             cancelDelayedScrollMemoization()
         }
-        const restoreScrollFromState = (state: HistoryState) => {
-            const scroll = getScrollFromState(state)
-            console.log(`Found scroll ${scroll?.toString()}. ${window.location.href}`)
-            if (scroll) {
-                const [x, y] = scroll
-                console.log(`Scroll restored to ${x} ${y}. Document height ${window.document.body.clientHeight}.`)
-                window.scrollTo({
-                    behavior: 'instant',
-                    left: x,
-                    top: y
-                })
-                console.log(`Scroll is ${window.scrollX} ${window.scrollY} after restoring. ${window.innerHeight}`)
-            }
-        }
+
         const navigationListener = (e: PopStateEvent) => {
             console.log('Popstate started.')
             resetContextAfterNav()
             const state = e.state as HistoryState ?? {}
-            restoreScrollFromState(state)
             window.history.replaceState({
                 ...state,
                 [getKey('is_navigating_history')]: 1,
@@ -56,10 +59,6 @@ const useScrollRestorer = (): void => {
             }, '')
         }
 
-        const restoreCurrentScrollPosition = () => {
-            console.log(`Restoring current scroll position. ${window.location.href}`)
-            restoreScrollFromState(getState())
-        }
 
         /**
          * This is important to run as late as possible after navigation.
