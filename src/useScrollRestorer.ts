@@ -1,4 +1,4 @@
-import {useEffect, useRef,} from "react"
+import {useEffect, useLayoutEffect, useRef, useState,} from "react"
 import {
     getIsNavigatingHistory, getKey, getPopstateTimestamp,
     getScrollFromState,
@@ -11,11 +11,17 @@ import {
 const getWindowScroll = (): ScrollPos => [window.scrollX, window.scrollY]
 const memoizationIntervalLimit = 300 as const
 const scrollRestorationThreshold = 500 as const
-const getState = ()=>window.history.state as HistoryState
+const getState = () => window.history.state as HistoryState
 const useScrollRestorer = (): void => {
 
-
-
+    const [restoreX2, setRestoreX2] = useState<null | (() => void)>(null)
+    useLayoutEffect(() => {
+        if (restoreX2) {
+            console.log('Restoring scroll second time.')
+            restoreX2()
+            setRestoreX2(null)
+        }
+    }, [restoreX2])
     const scrollMemoTimeoutRef = useRef<ReturnType<typeof setTimeout>>()
     useEffect(() => {
         window.history.scrollRestoration = 'manual'
@@ -28,14 +34,14 @@ const useScrollRestorer = (): void => {
             const scroll = getScrollFromState(state)
             console.log(`Found scroll ${scroll?.toString()}. ${window.location.href}`)
             if (scroll) {
-                const [x,y] = scroll
-                console.log(`Scroll restored to ${x} ${y}.`)
+                const [x, y] = scroll
+                console.log(`Scroll restored to ${x} ${y}. Document height ${window.document.body.clientHeight}.`)
                 window.scrollTo({
                     behavior: 'instant',
-                    left:x,
-                    top:y
+                    left: x,
+                    top: y
                 })
-                console.log(`Scroll is ${window.scrollX} ${window.scrollY} after restoring.`)
+                console.log(`Scroll is ${window.scrollX} ${window.scrollY} after restoring. ${window.innerHeight}`)
             }
         }
         const navigationListener = (e: PopStateEvent) => {
@@ -46,7 +52,7 @@ const useScrollRestorer = (): void => {
             window.history.replaceState({
                 ...state,
                 [getKey('is_navigating_history')]: 1,
-                [getKey('popstate_timestamp')]:(new Date()).getTime()
+                [getKey('popstate_timestamp')]: (new Date()).getTime()
             }, '')
         }
 
@@ -67,7 +73,7 @@ const useScrollRestorer = (): void => {
                 if (timeNavigated === null) {
                     return false
                 }
-                return (((new Date()).getTime() -timeNavigated) < scrollRestorationThreshold)
+                return (((new Date()).getTime() - timeNavigated) < scrollRestorationThreshold)
             }
             console.log(`Check workaround for safari: ${x} ${y} ${isWorkaroundAllowed()}. Is popstate ${getIsNavigatingHistory(getState())}. ${window.location.href}`)
 
@@ -93,8 +99,8 @@ const useScrollRestorer = (): void => {
         const mountNavigationListener = () => {
             console.log('Mount popstate.')
 
-            window.addEventListener('popstate', navigationListener,{
-                passive:true
+            window.addEventListener('popstate', navigationListener, {
+                passive: true
             })
         }
 
@@ -107,7 +113,7 @@ const useScrollRestorer = (): void => {
         }
 
         const scrollMemoizationHandler = (pos: ScrollPos) => {
-            const isScrollMemoAllowedNow = () =>{
+            const isScrollMemoAllowedNow = () => {
                 const timestamp = getScrollTimestamp(getState())
                 if (null === timestamp) {
                     return true
@@ -144,8 +150,8 @@ const useScrollRestorer = (): void => {
         }
         const mountScrollListener = () => {
             console.log('Scroll listener mounted.')
-            window.addEventListener('scroll', scrollListener,{
-                passive:true
+            window.addEventListener('scroll', scrollListener, {
+                passive: true
             })
         }
         const unmountScrollListener = () => {
