@@ -43,17 +43,15 @@ const useScrollRestorer = (): void => {
     }, [pathname, searchparams])
     const scrollMemoTimeoutRef = useRef<ReturnType<typeof setTimeout>>()
     const scrollMemoCountInInterval = useRef<number>(0)//Used to workaround instant scrollTo() calls.It's used to work around immediate scroll in tests and possible real world behaviour.
-
+const isSafariWorkaroundAllowedRef = useRef(false)
     useEffect(() => {
         window.history.scrollRestoration = 'manual'
 
-        const resetContextAfterNav = () => {
-            cancelDelayedScrollMemoization()
-        }
-
         const navigationListener = (e: PopStateEvent) => {
             console.log('Popstate started.')
-            resetContextAfterNav()
+            cancelDelayedScrollMemoization()
+
+            isSafariWorkaroundAllowedRef.current = true
             const state = e.state as HistoryState ?? {}
             window.history.replaceState({
                 ...state,
@@ -75,7 +73,7 @@ const useScrollRestorer = (): void => {
 
             // Sometimes Safari scroll to the start because of unique behavior We restore it back.
             // This case cannot be tested with Playwright, or any other testing library.
-            if ((x === 0 && y === 0)) {
+            if ((x === 0 && y === 0) &&  isSafariWorkaroundAllowedRef.current) {
                 const isWorkaroundAllowed = (() => {
                     const timeNavigated = getPopstateTimestamp(state)
                     if (timeNavigated === null) {
@@ -90,6 +88,8 @@ const useScrollRestorer = (): void => {
                     restoreCurrentScrollPosition()
                     return true
                 }
+            } else {
+                isSafariWorkaroundAllowedRef.current = false //Disable owrkaround because safari bug occurs only on [0,0]
             }
 
             return false
