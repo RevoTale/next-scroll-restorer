@@ -140,7 +140,6 @@ test('Smooth scrolling', async ({page}) => {
     //Test for a scroll to not produce any errors. Https://github.com/sveltejs/kit/issues/365
     let error: string | null = null
     page.on("console", (msg) => {
-        console.log(msg.text())
         if (msg.type() === 'error') {
             error = msg.text()
         }
