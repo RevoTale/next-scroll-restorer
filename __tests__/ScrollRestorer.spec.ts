@@ -23,24 +23,24 @@ const scrollPage = (page: Page, scrollY: number) => {
                 resolve(true)
                 return
             }
-            const timeout = setTimeout(()=>{
+            const timeout = setTimeout(() => {
                 window.scrollTo({
                     top: value,
                     left: 0,
                     behavior: "smooth",
                 })
-            },500)//There are lags 3with smooth scroll behavior. THis is workaround to trigger scroll again.
+            }, 500)//There are lags 3with smooth scroll behavior. THis is workaround to trigger scroll again.
             const listener = () => {
-                const diff = (value-window.scrollY)
-                if (-2 < diff && diff<2 ) {
+                const diff = (value - window.scrollY)
+                if (-2 < diff && diff < 2) {
                     window.removeEventListener('scroll', listener)
                     resolve(true)
                     clearTimeout(timeout)
                 }
 
             }
-            window.addEventListener('scroll', listener,{
-                passive:true
+            window.addEventListener('scroll', listener, {
+                passive: true
             })
             window.scrollTo({
                 top: value,
@@ -49,7 +49,7 @@ const scrollPage = (page: Page, scrollY: number) => {
             })
 
         })
-    },scrollY)
+    }, scrollY)
 }
 const initTests = async (page: Page) => {
 
@@ -134,6 +134,32 @@ test('End to end testing of scroll restorer', async ({page, browserName}) => {
 
 })
 
+test('Safari scroll reset bug simulation', async ({page}) => {
+    await initTests(page)
+    await page.goForward()
+    await expectScrollToBe(page, 0)
+    await page.goBack()
+    await page.evaluate(() => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'instant'
+        })
+    })//This is actual bug behaviour
+
+    await resolveTimeout(500) //Webkit does it not immediately
+    await expectScrollToBe(page, mainPage)
+    await page.evaluate(() => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'instant'
+        })
+    })//Test second time, it should allow scroll
+
+    await resolveTimeout(500) //Webkit does it not immediately
+    await expectScrollToBe(page, 0)
+
+
+})
 test('Smooth scrolling', async ({page}) => {
     await initTests(page)
 

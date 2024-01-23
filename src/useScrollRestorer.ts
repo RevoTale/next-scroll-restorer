@@ -86,10 +86,9 @@ const isSafariWorkaroundAllowedRef = useRef(false)
                 if (isWorkaroundAllowed && isNavHistory) {
                     console.log(`Reverting back scroll because browser tried to brake it..`)
                     restoreCurrentScrollPosition()
+                    isSafariWorkaroundAllowedRef.current = false //Safari bug appears only once
                     return true
                 }
-            } else {
-                isSafariWorkaroundAllowedRef.current = false //Disable owrkaround because safari bug occurs only on [0,0]
             }
 
             return false
