@@ -148,6 +148,15 @@ test('Safari scroll reset bug simulation', async ({page}) => {
 
     await resolveTimeout(500) //Webkit does it not immediately
     await expectScrollToBe(page, mainPage)
+    await page.evaluate(() => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'instant'
+        })
+    })//Test second time, it should allow scroll
+
+    await resolveTimeout(500) //Webkit does it not immediately
+    await expectScrollToBe(page, 0)
 
 
 })
