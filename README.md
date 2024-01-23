@@ -20,7 +20,7 @@ Fixed bugs that Next.js team ignored.
 Before you start, keep in mind following rules.
 - Keep disabled native `scrollRestoration` option in Next.js config to avoid conflicts.
 - **Skip this rule for Next.js [14.1.0](https://github.com/vercel/next.js/releases/tag/v14.1.0) and higher.** In case your Next.js version is less than [14.1.0](https://github.com/vercel/next.js/releases/tag/v14.1.0) then you should enable `windowHistorySupport` in your Next.js config under `expermimental` property.
-  [Next.js 14.1.0 enabled browser history support by default.](https://github.com/vercel/next.js/pull/60557)
+  [Since Next.js 14.1.0 browser history support is enabled by default.](https://github.com/vercel/next.js/pull/60557)
 ```js
 /** @type {import('next').NextConfig} */
 const nextConfig = {
