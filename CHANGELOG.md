@@ -1,5 +1,13 @@
 # next-scroll-restorer
 
+## 0.9.4
+
+### Patch Changes
+
+- 2f3b482: Fix bug where safari workaround caused revert to previous scroll position when spwiping to the top of the website.
+- 2f3b482: Add integration tests with simulation of Safari scroll reset bug.
+  Finally, make working workaround for this bug.
+
 ## 0.9.3
 
 ### Patch Changes
