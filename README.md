@@ -50,7 +50,7 @@ export default ClientSideScrollRestorer
 ### Step 2
 Import component created in a previous step to your root layout file (layout.tsx).
 Wrap it wih [React](https://react.dev/reference/react/Suspense) `<Suspense/>` to avoid possible [client-side deopting for entire page](https://nextjs.org/docs/messages/deopted-into-client-rendering). 
-```tsxre
+```tsx
 import {ClientSideScrollRestorer} from '../src'
 import {ReactNode, Suspense} from "react";
 
