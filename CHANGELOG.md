@@ -1,5 +1,11 @@
 # next-scroll-restorer
 
+## 0.9.5
+
+### Patch Changes
+
+- 11f1008: Update readme. Fix NPM approval badge.
+
 ## 0.9.4
 
 ### Patch Changes
