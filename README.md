@@ -38,6 +38,7 @@ module.exports = nextConfig
 ### Step 1
 Create component named `ClientSideScrollRestorer` in your `src` directory with `useScrollRestorer` hook and `"use client"` directive to prevent server errors.
 
+**src/ClientSideScrollRestorer.tsx**
 ```tsx
 "use client"
 import {useScrollRestorer} from 'next-scroll-restorer';
@@ -50,8 +51,10 @@ export default ClientSideScrollRestorer
 ### Step 2
 Import component created in a previous step to your root layout file (layout.tsx).
 Wrap it wih [React](https://react.dev/reference/react/Suspense) `<Suspense/>` to avoid possible [client-side deopting for entire page](https://nextjs.org/docs/messages/deopted-into-client-rendering). 
+
+**app/layout.tsx**
 ```tsx
-import {ClientSideScrollRestorer} from '../src'
+import ClientSideScrollRestorer from '../src/ClientSideScrollRestorer'
 import {ReactNode, Suspense} from "react";
 
 type Props = {
