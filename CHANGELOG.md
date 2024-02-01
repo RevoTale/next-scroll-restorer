@@ -1,5 +1,11 @@
 # next-scroll-restorer
 
+## 0.9.7
+
+### Patch Changes
+
+- 5910596: Add NPM package link to README.
+
 ## 0.9.6
 
 ### Patch Changes
