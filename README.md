@@ -1,4 +1,9 @@
 # NextJs Scroll Restorer
+![NPM Version](https://img.shields.io/npm/v/next-scroll-restorer)
+![NPM Downloads](https://img.shields.io/npm/dm/next-scroll-restorer)
+![NPM License](https://img.shields.io/npm/l/next-scroll-restorer)
+![npm bundle size](https://img.shields.io/bundlephobia/min/next-scroll-restorer)
+![NPM Type Definitions](https://img.shields.io/npm/types/next-scroll-restorer)
 
 Scroll restoration for Next.js apps built with **app** directory. 
 Fixed bugs that Next.js team ignored.
