@@ -5,13 +5,12 @@
 ![npm bundle size](https://img.shields.io/bundlephobia/min/next-scroll-restorer)
 ![NPM Type Definitions](https://img.shields.io/npm/types/next-scroll-restorer)
 
-Scroll restoration for Next.js apps built with **app** directory. 
+[next-scroll-restorer](https://www.npmjs.com/package/next-scroll-restorer) handles scroll restoration for Next.js apps built with **app** directory. 
 Fixed bugs that Next.js team ignored.
 
 **Important!** This component works only for application written with [**Next.js 'app' directory**](https://nextjs.org/docs/app).
-
 ## Install
-
+- `npm install next-scroll-restorer`  for [NPM](https://www.npmjs.com/package/next-scroll-restorer)
 - `pnpm add next-scroll-restorer`  for [pnpm](https://pnpm.io)
 - `yarn add next-scroll-restorer` for [Yarn](https://yarnpkg.com)
 
