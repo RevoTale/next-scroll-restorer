@@ -1,5 +1,11 @@
 # next-scroll-restorer
 
+## 0.9.6
+
+### Patch Changes
+
+- e771ab8: Add NPM badge to Readme
+
 ## 0.9.5
 
 ### Patch Changes
