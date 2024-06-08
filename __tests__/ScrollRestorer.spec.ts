@@ -132,6 +132,14 @@ test('End to end testing of scroll restorer', async ({page, browserName}) => {
     await resolveTimeout(1000)//Sometimes browsers struggle to restore the same millisecond
     await expectScrollToBe(page, mainPage)
 
+
+
+    await page.getByText('Lets-go without scroll').scrollIntoViewIfNeeded()
+    await expectScrollToBe(page, mainPage)
+    await page.getByText('Lets-go without scroll').click()
+    await page.waitForURL('/?fff=fff')
+    await expectScrollToBe(page, mainPage)
+
 })
 
 test('Safari scroll reset bug simulation', async ({page}) => {

@@ -1,5 +1,5 @@
 export type ScrollPos = [number, number]
-const uniq = 'revotale_nextjs_scroll_restoration' as const
+const uniq = 'revotale_nextjs_scroll_restoration'
 type HistoryKeys = 'x' | 'y'| 'memo_timestamp' | 'is_navigating_history' | 'popstate_timestamp'
 
 export const getKey = (pos:HistoryKeys ) => `${uniq}_${pos}`

@@ -1,5 +1,4 @@
-"use client"
-
+'use client'
 import {ScrollRestorer} from "../../src"
 
 const ClientSideScrollRestorer = () => {
