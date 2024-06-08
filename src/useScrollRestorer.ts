@@ -10,8 +10,8 @@ import {
 } from "./storage"
 
 const getWindowScroll = (): ScrollPos => [window.scrollX, window.scrollY]
-const memoizationIntervalLimit = 601 as const//100 times per 30 seconds
-const safariBugWorkaroundTimeThreshold = 2000 as const //Safari reset scroll position to 0 0 after popstate for some reason.
+const memoizationIntervalLimit = 601//100 times per 30 seconds
+const safariBugWorkaroundTimeThreshold = 2000 //Safari reset scroll position to 0 0 after popstate for some reason.
 const getState = () => window.history.state as HistoryState
 const restoreScrollFromState = (state: HistoryState) => {
     const scroll = getScrollFromState(state)
@@ -27,7 +27,7 @@ const restoreScrollFromState = (state: HistoryState) => {
         console.log(`Scroll is ${window.scrollX} ${window.scrollY} after restoring. ${window.innerHeight}`)
     }
 }
-const scrollMemoIntervalCountLimit = 2 as const
+const scrollMemoIntervalCountLimit = 2
 const restoreCurrentScrollPosition = () => {
     console.log(`Restoring current scroll position. ${window.location.href}`)
     restoreScrollFromState(getState())
