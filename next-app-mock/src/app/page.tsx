@@ -9,6 +9,9 @@ const Page  = ()=>{
         <Link href="/low-page">
             Lets-go to low-page
         </Link>
+        <Link href="/?fff=fff" scroll={false}>
+            Lets-go without scroll
+        </Link>
     </div>
 }
 export default Page
