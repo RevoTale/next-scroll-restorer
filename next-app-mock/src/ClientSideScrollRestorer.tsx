@@ -1,8 +1,8 @@
-"use client"
 
+import {Suspense} from "react"
 import {ScrollRestorer} from "../../src"
 
 const ClientSideScrollRestorer = () => {
-    return <ScrollRestorer />
+    return <Suspense><ScrollRestorer /></Suspense>
 }
 export default ClientSideScrollRestorer
