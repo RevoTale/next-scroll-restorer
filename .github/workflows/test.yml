@@ -14,7 +14,7 @@ jobs:
     timeout-minutes: 15
     strategy:
       matrix:
-        node-version: [18, 20]
+        node-version: [20,21]
         os: [ubuntu-latest]
     steps:
       - uses: actions/checkout@v4
