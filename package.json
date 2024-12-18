@@ -47,17 +47,15 @@
     "@changesets/cli": "^2.27.5",
     "@playwright/test": "^1.44.1",
     "@types/node": "^20.14.2",
-    "@types/react": "^18.3.3",
+    "@types/react": "^18.0 || ^19.0",
     "changeset": "^0.2.6",
-    "eslint": "^8.56.0",
-    "eslint-config-grisaia-react": "^0.6.16",
-    "eslint-config-grisaia-typescript": "^0.6.16",
+    "eslint": "^9.0",
     "grisaia-package-builder": "^0.1.17",
     "typescript": "^5.4.5"
   },
   "peerDependencies": {
     "next": "^14.0 || ^15.0",
-    "react": "^17.0 || ^18.0 || ^19.0"
+    "react": "^18.0 || ^19.0"
   },
   "packageManager": "pnpm@9.15.0"
 }

@@ -1,5 +1,5 @@
 {
-  "extends": ["eslint-config-grisaia-react","eslint-config-grisaia-typescript"],
+  "extends": ["eslint-config-love"],
   "parserOptions": {
     "project": "./tsconfig.eslint.json"
   },
