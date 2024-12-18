@@ -3,11 +3,17 @@ updates:
   - package-ecosystem: github-actions
     directory: /
     schedule:
-      interval: weekly
+      interval: daily
   - package-ecosystem: npm
     directory: /
+    groups:
+      all:
+        patterns:
+          - "*"
     schedule:
-      interval: weekly
+      interval: daily
+    commit-message:
+      prefix: "npm"
     ignore:
       - dependency-name: "*"
-        update-types: [ "version-update:semver-patch","version-update:semver-minor"  ]
+        update-types: [ "version-update:semver-minor","version-update:semver-major",  ]
