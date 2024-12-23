@@ -1,5 +1,13 @@
 # next-scroll-restorer
 
+## 0.9.8
+
+### Patch Changes
+
+- 2a73a3a: Update dependabot to keep up-to-date major versions
+- 2a73a3a: Bump to react^19 nad next^15
+- 2a73a3a: Bump pnpm/action-setup@v4.0.0
+
 ## 0.9.7
 
 ### Patch Changes
