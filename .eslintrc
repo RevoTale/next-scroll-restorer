@@ -1,7 +1,0 @@
-{
-  "extends": ["eslint-config-love"],
-  "parserOptions": {
-    "project": "./tsconfig.eslint.json"
-  },
-  "ignorePatterns": [ "**/dist/**","**/next.config.js"]
-}

@@ -12,8 +12,8 @@ import { defineConfig, devices } from '@playwright/test'
 const port = Number(process.env.PORT)||3033
 export default defineConfig({
   webServer: {
-    command: `pnpm -C ./next-app-mock build && pnpm -C ./next-app-mock start -- --experimental-test-proxy --port ${port}`,
-    port:port
+    command: `pnpm -C ./next-app-mock build && pnpm -C ./next-app-mock start --port ${port}`,
+    port: port
   },
   use: {
     baseURL: `http://127.0.0.1:${port}`,
