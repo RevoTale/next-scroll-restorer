@@ -5,9 +5,6 @@ const nextConfig = {
         // your project has ESLint errors.
         ignoreDuringBuilds: true,
     },
-    experimental:{
-        windowHistorySupport:true
-    }
 }
 
 module.exports = nextConfig
