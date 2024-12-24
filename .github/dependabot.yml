@@ -14,6 +14,3 @@ updates:
       interval: daily
     commit-message:
       prefix: "npm"
-    ignore:
-      - dependency-name: "*"
-        update-types: [ "version-update:semver-minor","version-update:semver-major",  ]
