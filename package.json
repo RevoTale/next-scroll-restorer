@@ -4,7 +4,7 @@
     "email": "l-you@revotale.com",
     "url": "https://github.com/l-you"
   },
-  "version": "0.9.8",
+  "version": "0.9.9",
   "name": "next-scroll-restorer",
   "main": "src/index.ts",
   "license": "MIT",
