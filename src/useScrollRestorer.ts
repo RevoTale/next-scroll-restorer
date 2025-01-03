@@ -41,9 +41,9 @@ const useScrollRestorer = (): void => {
         console.log('Restoring based on hooks.')
         restoreCurrentScrollPosition()
     }, [pathname, searchparams])
-    const scrollMemoTimeoutRef = useRef<ReturnType<typeof setTimeout>>()
+    const scrollMemoTimeoutRef = useRef<ReturnType<typeof setTimeout>>(undefined)
     const scrollMemoCountInInterval = useRef<number>(0)//Used to workaround instant scrollTo() calls.It's used to work around immediate scroll in tests and possible real world behaviour.
-const isSafariWorkaroundAllowedRef = useRef(false)
+    const isSafariWorkaroundAllowedRef = useRef(false)
     useEffect(() => {
         window.history.scrollRestoration = 'manual'
 
