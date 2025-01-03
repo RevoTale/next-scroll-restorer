@@ -1,5 +1,11 @@
 # next-scroll-restorer
 
+## 0.9.9
+
+### Patch Changes
+
+- 348927d: bump packages to latest version
+
 ## 0.9.8
 
 ### Patch Changes
