@@ -46,13 +46,13 @@
   "devDependencies": {
     "@changesets/cli": "^2.27.5",
     "@playwright/test": "^1.44.1",
-    "@types/node": "^22.10.5",
+    "@types/node": "^22.10.7",
     "@types/react": "^19.0",
     "changeset": "^0.2.6",
-    "eslint": "^9.0",
+    "eslint": "^9.18",
     "grisaia-package-builder": "^0.1.17",
-    "typescript": "^5.4.5",
-    "eslint-config-love": "^114.0.0"
+    "typescript": "^5.7.3",
+    "eslint-config-love": "^117.0.0"
   },
   "peerDependencies": {
     "next": "^14.0 || ^15.0",
