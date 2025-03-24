@@ -45,14 +45,14 @@
   },
   "devDependencies": {
     "@changesets/cli": "^2.28.1",
-    "@playwright/test": "^1.50.1",
-    "@types/node": "^22.13.8",
+    "@playwright/test": "^1.51.1",
+    "@types/node": "^22.13.13",
     "@types/react": "^19.0",
     "changeset": "^0.2.6",
-    "eslint": "^9.21",
+    "eslint": "^9.23",
     "grisaia-package-builder": "^0.1.17",
     "typescript": "^5.8.2",
-    "eslint-config-love": "^118.0.0"
+    "eslint-config-love": "^119.0.0"
   },
   "peerDependencies": {
     "next": "^14.0 || ^15.0",
