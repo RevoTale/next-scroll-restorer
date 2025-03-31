@@ -46,7 +46,7 @@
   "devDependencies": {
     "@changesets/cli": "^2.28.1",
     "@playwright/test": "^1.51.1",
-    "@types/node": "^22.13.13",
+    "@types/node": "^22.13.14",
     "@types/react": "^19.0",
     "changeset": "^0.2.6",
     "eslint": "^9.23",
