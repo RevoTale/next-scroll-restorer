@@ -1,5 +1,17 @@
 # next-scroll-restorer
 
+## 0.10.0
+
+### Minor Changes
+
+- 0f56dc7: Change bundler to `tsup`
+
+### Patch Changes
+
+- 0f56dc7: Fix eslint error according to new eslint config.
+- 0f56dc7: Drop support for nextjs 14 because there is a major changeset between react 18 and 19
+- 0f56dc7: Add tests on different nextjs verisions and lowest/highest deps
+
 ## 0.9.9
 
 ### Patch Changes
