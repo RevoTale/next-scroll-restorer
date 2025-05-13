@@ -23,7 +23,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: pnpm
-      - run: pnpm i
+      - run: pnpm i && pnpm build
       - run: pnpm playwright install --with-deps
       - run: pnpm test
         env:
