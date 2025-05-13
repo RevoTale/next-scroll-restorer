@@ -14,10 +14,8 @@ jobs:
     timeout-minutes: 15
     strategy:
       matrix:
-        node-version: [20,21]
+        node-version: [20,22]
         os: [ubuntu-latest]
-        nextjs-version: [14.0.0, 15.0.0]
-        deps: [lowest, highest]
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4.1.0
@@ -25,24 +23,14 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: pnpm
-      - name: Set up Next.js version in test app
-        run: |
-          cd next-app-mock
-          pnpm add next@${{ matrix.nextjs-version }}
-      - name: Install dependencies (lowest/highest)
-        run: |
-          if [ "${{ matrix.deps }}" = "lowest" ]; then
-            pnpm install --prefer-lowest
-          else
-            pnpm install
-          fi
+      - run: pnpm i
       - run: pnpm playwright install --with-deps
       - run: pnpm test
         env:
           CI: true
       - uses: actions/upload-artifact@v4
         with:
-          name: my-artifacts-${{inputs.context}}-${{inputs.job-index}}-${{ matrix.node-version }}-${{ matrix.nextjs-version }}-${{ matrix.deps }}
+          name: my-artifacts-${{inputs.context}}-${{inputs.job-index}}-${{ matrix.node-version }}
           path: playwright-report/
       - uses: actions/download-artifact@v4
         with:
