@@ -1,13 +1,19 @@
+import { isRecord } from "./util"
+
 export type ScrollPos = [number, number]
 const uniq = 'revotale_nextjs_scroll_restoration'
 type HistoryKeys = 'x' | 'y'| 'memo_timestamp' | 'is_navigating_history' | 'popstate_timestamp'
 
-export const getKey = (pos:HistoryKeys ) => `${uniq}_${pos}`
+export const getKey = (pos:HistoryKeys ):string => `${uniq}_${pos}`
 export type HistoryState = Record<string, unknown> | null
-export const setCurrentScrollHistory = ( [x, y]: ScrollPos) => {
-    x = Math.max(x, 0)
-    y = Math.max(y, 0) //Sometime browsers make negative scroll
-    const newState: HistoryState = (window.history.state as HistoryState) ?? {}
+const defaultX = 0
+const defaultY = 0
+export const setCurrentScrollHistory = ( [x, y]: ScrollPos):void => {
+    x = Math.max(x, defaultX)
+    y = Math.max(y, defaultY) //Sometime browsers make negative scroll
+    const winState = window.history.state as unknown
+
+    const newState: HistoryState = (isRecord(winState)?winState:null) ?? {}
     window.history.replaceState({
         ...newState,
         [getKey('x')]: x,
@@ -15,13 +21,13 @@ export const setCurrentScrollHistory = ( [x, y]: ScrollPos) => {
         [getKey('memo_timestamp')]:(new Date()).getTime()
     }, '')
 }
-const retrieveNum = (name: HistoryKeys,state:HistoryState) => {
+const retrieveNum = (name: HistoryKeys,state:HistoryState):number|null => {
 
     if (state === null) {
         return null
     }
     const key = getKey(name)
-    const value = state[key]
+    const {[key]:value} = state
     if (value === null) {
         return null
     }
@@ -37,4 +43,4 @@ export const getScrollFromState = (state: HistoryState): ScrollPos | null => {
 }
 export const getScrollTimestamp = (state: HistoryState):number|null=>retrieveNum('memo_timestamp',state)
 export const getPopstateTimestamp = (state: HistoryState):number|null=>retrieveNum('popstate_timestamp',state)
-export const getIsNavigatingHistory = (state: HistoryState):boolean=>state?Boolean(state[getKey('is_navigating_history')]):false
+export const getIsNavigatingHistory = (state: HistoryState):boolean=>state !== null?Boolean(state[getKey('is_navigating_history')]):false
