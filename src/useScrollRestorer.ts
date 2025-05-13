@@ -1,22 +1,28 @@
+/* eslint-disable no-console -- console required for debugging. Its dropped with bundler on production. */
 import {usePathname, useSearchParams} from "next/navigation"
 import {useEffect, useLayoutEffect, useRef,} from "react"
 import {
     getIsNavigatingHistory, getKey, getPopstateTimestamp,
     getScrollFromState,
     getScrollTimestamp,
-    HistoryState,
-    ScrollPos,
+    type HistoryState,
+    type ScrollPos,
     setCurrentScrollHistory
 } from "./storage"
+import { isRecord } from "./util"
 
 const getWindowScroll = (): ScrollPos => [window.scrollX, window.scrollY]
 const memoizationIntervalLimit = 601//100 times per 30 seconds
 const safariBugWorkaroundTimeThreshold = 2000 //Safari reset scroll position to 0 0 after popstate for some reason.
-const getState = () => window.history.state as HistoryState
-const restoreScrollFromState = (state: HistoryState) => {
+
+const getState = ():HistoryState => {
+    const state = window.history.state as unknown
+    return isRecord(state)?state:null
+}
+const restoreScrollFromState = (state: HistoryState):void => {
     const scroll = getScrollFromState(state)
     console.log(`Found scroll ${scroll?.toString()}. ${window.location.href}`)
-    if (scroll) {
+    if (scroll !== null) {
         const [x, y] = scroll
         console.log(`Scroll restored to ${x} ${y}. Document height ${window.document.body.clientHeight}.`)
         window.scrollTo({
@@ -28,10 +34,14 @@ const restoreScrollFromState = (state: HistoryState) => {
     }
 }
 const scrollMemoIntervalCountLimit = 2
-const restoreCurrentScrollPosition = () => {
+const restoreCurrentScrollPosition = ():void => {
     console.log(`Restoring current scroll position. ${window.location.href}`)
     restoreScrollFromState(getState())
 }
+const defaultMemoInterval = 0
+const numericTrue = 1
+const defaultX = 0
+const defaultY = 0
 const useScrollRestorer = (): void => {
     const pathname = usePathname()
     const searchparams = useSearchParams()
@@ -42,20 +52,20 @@ const useScrollRestorer = (): void => {
         restoreCurrentScrollPosition()
     }, [pathname, searchparams])
     const scrollMemoTimeoutRef = useRef<ReturnType<typeof setTimeout>>(undefined)
-    const scrollMemoCountInInterval = useRef<number>(0)//Used to workaround instant scrollTo() calls.It's used to work around immediate scroll in tests and possible real world behaviour.
+    const scrollMemoCountInInterval = useRef<number>(defaultMemoInterval)//Used to workaround instant scrollTo() calls.It's used to work around immediate scroll in tests and possible real world behaviour.
     const isSafariWorkaroundAllowedRef = useRef(false)
     useEffect(() => {
         window.history.scrollRestoration = 'manual'
 
-        const navigationListener = (e: PopStateEvent) => {
+        const navigationListener = ({state:eState}: PopStateEvent):void => {
             console.log('Popstate started.')
             cancelDelayedScrollMemoization()
 
             isSafariWorkaroundAllowedRef.current = true
-            const state = e.state as HistoryState ?? {}
+            const state = (isRecord(eState)?eState:null) ?? {}
             window.history.replaceState({
                 ...state,
-                [getKey('is_navigating_history')]: 1,
+                [getKey('is_navigating_history')]: numericTrue,
                 [getKey('popstate_timestamp')]: (new Date()).getTime()
             }, '')
         }
@@ -67,13 +77,13 @@ const useScrollRestorer = (): void => {
          * useLayoutEffect + usePageHref hook is the latest reactive thing Next.js app can provide to use.
          * In Safari even with `window.history.scrollRestoration = 'manual'` scroll position is reset.
          */
-        const workaroundSafariBreaksScrollRestoration = ([x, y]: ScrollPos) => {
+        const workaroundSafariBreaksScrollRestoration = ([x, y]: ScrollPos):boolean => {
             const state = getState()
 
 
             // Sometimes Safari scroll to the start because of unique behavior We restore it back.
             // This case cannot be tested with Playwright, or any other testing library.
-            if ((x === 0 && y === 0) &&  isSafariWorkaroundAllowedRef.current) {
+            if ((x === defaultX && y === defaultY) &&  isSafariWorkaroundAllowedRef.current) {
                 const isWorkaroundAllowed = (() => {
                     const timeNavigated = getPopstateTimestamp(state)
                     if (timeNavigated === null) {
@@ -93,17 +103,18 @@ const useScrollRestorer = (): void => {
 
             return false
         }
-        const rememberScrollPosition = (pos: ScrollPos) => {
+        const rememberScrollPosition = (pos: ScrollPos):void => {
+            // eslint-disable-next-line @typescript-eslint/no-magic-numbers -- it's stale index
             console.log(`Remember history scroll to ${pos[0]} ${pos[1]}. Href ${window.location.href}.`)
             cancelDelayedScrollMemoization()
             setCurrentScrollHistory(pos)
         }
-        const unmountNavigationListener = () => {
+        const unmountNavigationListener = () :void=> {
             console.log('Unmount popstate.')
 
             window.removeEventListener('popstate', navigationListener)
         }
-        const mountNavigationListener = () => {
+        const mountNavigationListener = ():void => {
             console.log('Mount popstate.')
 
             window.addEventListener('popstate', navigationListener, {
@@ -111,8 +122,8 @@ const useScrollRestorer = (): void => {
             })
         }
 
-        const cancelDelayedScrollMemoization = () => {
-            if (scrollMemoTimeoutRef.current) {
+        const cancelDelayedScrollMemoization = ():void => {
+            if (scrollMemoTimeoutRef.current !== undefined) {
                 console.log(`Cancelled delayed memoization.`)
                 clearTimeout(scrollMemoTimeoutRef.current)
                 scrollMemoTimeoutRef.current = undefined
@@ -120,10 +131,10 @@ const useScrollRestorer = (): void => {
 
         }
 
-        const scrollMemoizationHandler = (pos: ScrollPos) => {
-            const isScrollMemoAllowedNow = () => {
+        const scrollMemoizationHandler = (pos: ScrollPos):void => {
+            const isScrollMemoAllowedNow = ():boolean => {
                 const timestamp = getScrollTimestamp(getState())
-                if (null === timestamp) {
+                if (timestamp === null) {
                     return true
                 }
                 return (new Date()).getTime() - timestamp > memoizationIntervalLimit
@@ -132,25 +143,26 @@ const useScrollRestorer = (): void => {
             const isAllowedNow = isScrollMemoAllowedNow()
             console.log(`Handle scroll event. Memo allowed: ${isAllowedNow}.`)
             if (isAllowedNow) {
-                scrollMemoCountInInterval.current = 0
+                scrollMemoCountInInterval.current = defaultMemoInterval
             }
             if (isAllowedNow || scrollMemoCountInInterval.current < scrollMemoIntervalCountLimit) {
                 scrollMemoCountInInterval.current++
                 rememberScrollPosition(pos)
             } else {
                 console.log(`Scroll memoization is not allowed. ${window.location.href}`)
-                if (!scrollMemoTimeoutRef.current) {
+                if (scrollMemoTimeoutRef.current === undefined) {
+                    // eslint-disable-next-line @typescript-eslint/no-magic-numbers -- it's just a fixed index
                     console.log(`Set delayed memoization ${pos[0]} ${pos[1]}`)
                     scrollMemoTimeoutRef.current = setTimeout(() => {
                         rememberScrollPosition(pos)
-                        scrollMemoCountInInterval.current = 0
+                        scrollMemoCountInInterval.current = defaultMemoInterval
                         scrollMemoTimeoutRef.current = undefined
                     }, memoizationIntervalLimit)
                 }
 
             }
         }
-        const scrollListener = () => {
+        const scrollListener = ():void => {
             cancelDelayedScrollMemoization()
             const scroll = getWindowScroll()
 
@@ -161,13 +173,13 @@ const useScrollRestorer = (): void => {
 
 
         }
-        const mountScrollListener = () => {
+        const mountScrollListener = () :void=> {
             console.log('Scroll listener mounted.')
             window.addEventListener('scroll', scrollListener, {
                 passive: true
             })
         }
-        const unmountScrollListener = () => {
+        const unmountScrollListener = ():void => {
             console.log('Scroll listener unmounted.')
             window.removeEventListener('scroll', scrollListener)
 
