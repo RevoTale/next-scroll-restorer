@@ -30,7 +30,7 @@
   },
   "type": "module",
   "scripts": {
-    "build": "tsup",
+    "build": "tsup && cp package.json README.md LICENSE dist/",
     "tsc": "tsc --noEmit",
     "changeset:version": "changeset version && git add --all",
     "changeset:publish": "changeset publish",
