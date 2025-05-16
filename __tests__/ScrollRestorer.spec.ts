@@ -168,12 +168,19 @@ test('Safari scroll reset bug simulation', async ({page}) => {
 
 
 })
-test('Twice zero scroll page bug simulation',async ({page})=>{
-    await initTests(page)
+test('Twice zero scroll page bug simulation try 1',async ({page})=>{
+    await page.goto('/')
     await expectScrollToBe(page, 0)
-    await page.waitForURL('/low-page')
-    await expectScrollToBe(page, 0)
+
+    await page.goto('/high')
     await page.waitForURL('/high')
+    await expectScrollToBe(page, 0)
+    
+    await scrollPage(page,highPage)
+    await expectScrollToBe(page, highPage)
+
+    await page.goto('/low-page')
+    await page.waitForURL('/low-page')
     await expectScrollToBe(page, 0)
 
     await resolveTimeout(400)
