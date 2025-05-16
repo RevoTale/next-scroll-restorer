@@ -168,6 +168,42 @@ test('Safari scroll reset bug simulation', async ({page}) => {
 
 
 })
+//I keep this test to have amount of test
+test('Some random behaviour 1',async ({page})=>{
+    await page.goto('/')
+    await expectScrollToBe(page, 0)
+
+    await page.goto('/high')
+    await page.waitForURL('/high')
+    await expectScrollToBe(page, 0)
+    
+    await scrollPage(page,highPage)
+    await expectScrollToBe(page, highPage)
+
+    await page.goto('/low-page')
+    await page.waitForURL('/low-page')
+    await expectScrollToBe(page, 0)
+
+    await resolveTimeout(400)
+    await expectScrollToBe(page, 0)
+
+
+   
+})
+test('Some random behaviour 2',async ({page})=>{
+    await page.goto('/')
+    await expectScrollToBe(page, 0)
+    await scrollPage(page,mainPage)
+    await page.goto('/high')
+    await page.waitForURL('/high')
+    await expectScrollToBe(page, 0)
+    
+    await resolveTimeout(500)
+    await expectScrollToBe(page, 0)
+
+
+   
+})
 test('Smooth scrolling', async ({page}) => {
     await initTests(page)
 
