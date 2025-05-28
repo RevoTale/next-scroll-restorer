@@ -204,6 +204,7 @@ test('Some random behaviour 2',async ({page})=>{
 
    
 })
+
 test('Some random behaviour 3 (bug fix)',async ({page})=>{
     await page.goto('/')
     await expectScrollToBe(page, 0)
@@ -218,6 +219,7 @@ test('Some random behaviour 3 (bug fix)',async ({page})=>{
 
    
 })
+
 test('Smooth scrolling', async ({page}) => {
     await initTests(page)
 
