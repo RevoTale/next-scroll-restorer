@@ -1,5 +1,11 @@
 # next-scroll-restorer
 
+## 0.10.1
+
+### Patch Changes
+
+- e7ddcfd: Remove console.log from build output
+
 ## 0.10.0
 
 ### Minor Changes
