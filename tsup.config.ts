@@ -7,5 +7,5 @@ export default defineConfig({
     format: ['cjs', 'esm'],
     dts: true,
     bundle: false,
-    target: 'es5',
+    pure:"console.log"
 })
