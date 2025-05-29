@@ -234,12 +234,10 @@ test('Smooth scrolling', async ({page}) => {
     await resolveTimeout(2000) // Timeout for safari scroll bug navigation workaround.
 
     const smoothScrollTop = async () => {
-        console.log('Scrolling to top.')
         await scrollPage(page, 0)
         await expectScrollToBe(page, 0)
     }
     const smoothScrollBottom = async () => {
-        console.log('Scrolling to bottom.')
 
         await scrollPage(page, mainPage)
 
