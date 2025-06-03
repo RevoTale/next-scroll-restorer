@@ -6,7 +6,7 @@
 ![NPM Type Definitions](https://img.shields.io/npm/types/next-scroll-restorer)
 
 [next-scroll-restorer](https://www.npmjs.com/package/next-scroll-restorer) handles scroll restoration for Next.js apps built with **app** directory. 
-Fixed bugs that Next.js team ignored.
+Fixed bugs related to forward/backward browser navigation that Next.js team ignored.
 
 **Important!** This component works only for application written with [**Next.js 'app' directory**](https://nextjs.org/docs/app).
 ## Install
