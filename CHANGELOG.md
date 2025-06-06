@@ -1,5 +1,11 @@
 # next-scroll-restorer
 
+## 0.10.2
+
+### Patch Changes
+
+- 1b09323: Fix dropping console.log in a bundle.
+
 ## 0.10.1
 
 ### Patch Changes
