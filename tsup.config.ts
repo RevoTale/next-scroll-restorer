@@ -7,5 +7,7 @@ export default defineConfig({
     format: ['cjs', 'esm'],
     dts: true,
     bundle: false,
-    pure:"console.log"
+    esbuildOptions(options) {
+        options.drop = ['console']; // this is the esbuild option
+    },
 })
