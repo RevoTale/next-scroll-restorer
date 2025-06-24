@@ -79,3 +79,6 @@ export default RootLayout
 ```
 It can be any nesting layout shared by [group of routes](https://nextjs.org/docs/app/building-your-application/routing/route-groups) in case you do not want to enable scroll restoration for the whole application.
 
+----
+
+Made by [Revotale](https://revotale.com) ❤️.
