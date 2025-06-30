@@ -46,7 +46,7 @@
   "devDependencies": {
     "@changesets/cli": "^2.29.5",
     "@playwright/test": "^1.52.0",
-    "@swc/core": "^1.11.31",
+    "@swc/core": "^1.12.7",
     "@types/node": "^24.0.3",
     "@types/react": "^19.1.4",
     "changeset": "^0.2.6",
