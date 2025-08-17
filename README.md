@@ -1,13 +1,18 @@
 # NextJs Scroll Restorer
+
 ![NPM Version](https://img.shields.io/npm/v/next-scroll-restorer)
 ![NPM Downloads](https://img.shields.io/npm/dm/next-scroll-restorer)
 ![NPM License](https://img.shields.io/npm/l/next-scroll-restorer)
 ![npm bundle size](https://img.shields.io/bundlephobia/min/next-scroll-restorer)
 ![NPM Type Definitions](https://img.shields.io/npm/types/next-scroll-restorer)
 
+
+
+<img width="1536" height="1024" alt="rest" src="https://github.com/user-attachments/assets/3f650fc8-16ff-4d4d-92a7-f3048e56204a" />
+
+
 [next-scroll-restorer](https://www.npmjs.com/package/next-scroll-restorer) handles scroll restoration for Next.js apps built with **app** directory. 
 Fixed bugs related to forward/backward browser navigation that Next.js team ignored.
-
 **Important!** This component works only for application written with [**Next.js 'app' directory**](https://nextjs.org/docs/app).
 ## Install
 - `npm install next-scroll-restorer`  for [NPM](https://www.npmjs.com/package/next-scroll-restorer)
