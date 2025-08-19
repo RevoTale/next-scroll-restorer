@@ -44,7 +44,7 @@
     "url": "https://github.com/RevoTale/next-scroll-restorer/issues"
   },
   "devDependencies": {
-    "@changesets/cli": "^2.29.5",
+    "@changesets/cli": "^2.29.6",
     "@playwright/test": "^1.52.0",
     "@swc/core": "^1.12.7",
     "@types/node": "^24.0.3",
