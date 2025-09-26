@@ -47,7 +47,7 @@
     "@changesets/cli": "^2.29.7",
     "@playwright/test": "^1.55.0",
     "@swc/core": "^1.12.7",
-    "@types/node": "^24.0.3",
+    "@types/node": "^24.5.2",
     "@types/react": "^19.1.4",
     "changeset": "^0.2.6",
     "eslint": "^9.26.0",
