@@ -45,7 +45,7 @@
   },
   "devDependencies": {
     "@changesets/cli": "^2.29.7",
-    "@playwright/test": "^1.55.0",
+    "@playwright/test": "^1.55.1",
     "@swc/core": "^1.12.7",
     "@types/node": "^24.5.2",
     "@types/react": "^19.1.4",
