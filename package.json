@@ -51,7 +51,7 @@
     "@types/react": "^19.1.4",
     "changeset": "^0.2.6",
     "eslint": "^9.26.0",
-    "eslint-config-love": "^125.0.0",
+    "eslint-config-love": "^130.0.0",
     "tsup": "^8.4.0",
     "typescript": "^5.8.3"
   },
