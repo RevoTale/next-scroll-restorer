@@ -21,7 +21,7 @@ export default defineConfig({
   },
   testDir: './__tests__',
   /* Run tests in files in parallel */
-  fullyParallel: true,
+  fullyParallel: false,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
   /* Retry on CI only */
@@ -45,7 +45,7 @@ export default defineConfig({
 
     {
       name: 'webkit',
-      use: { ...devices['Desktop Safari'] },
+      use: { ...devices['iPhone 15 Pro'] },
     },
   ],
 })
