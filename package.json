@@ -45,15 +45,20 @@
   },
   "devDependencies": {
     "@changesets/cli": "^2.29.7",
-    "@playwright/test": "^1.55.1",
-    "@swc/core": "^1.12.7",
-    "@types/node": "^24.5.2",
-    "@types/react": "^19.1.4",
+    "@playwright/test": "1.55.1",
+    "@swc/core": "^1.13.5",
+    "@types/node": "^24.9.1",
+    "@types/react": "^19.2.2",
     "changeset": "^0.2.6",
-    "eslint": "^9.26.0",
+    "eslint": "^9.38.0",
     "eslint-config-love": "^133.0.0",
-    "tsup": "^8.4.0",
-    "typescript": "^5.8.3"
+    "tsup": "^8.5.0",
+    "typescript": "^5.9.3"
+  },
+  "pnpm": {
+    "overrides": {
+      "@playwright/test@1.56.1": "1.55.1"
+    }
   },
   "peerDependencies": {
     "next": "^15.0",
