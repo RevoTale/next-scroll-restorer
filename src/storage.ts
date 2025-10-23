@@ -9,15 +9,15 @@ export type HistoryState = Record<string, unknown> | null
 const defaultX = 0
 const defaultY = 0
 export const setCurrentScrollHistory = ( [x, y]: ScrollPos):void => {
-    x = Math.max(x, defaultX)
-    y = Math.max(y, defaultY) //Sometime browsers make negative scroll
+    const normX = Math.max(x, defaultX)
+    const normY = Math.max(y, defaultY) //Sometime browsers make negative scroll
     const winState = window.history.state as unknown
 
     const newState: HistoryState = (isRecord(winState)?winState:null) ?? {}
     window.history.replaceState({
         ...newState,
-        [getKey('x')]: x,
-        [getKey('y')]: y,
+        [getKey('x')]: normX,
+        [getKey('y')]: normY,
         [getKey('memo_timestamp')]:(new Date()).getTime()
     }, '')
 }
@@ -43,4 +43,4 @@ export const getScrollFromState = (state: HistoryState): ScrollPos | null => {
 }
 export const getScrollTimestamp = (state: HistoryState):number|null=>retrieveNum('memo_timestamp',state)
 export const getPopstateTimestamp = (state: HistoryState):number|null=>retrieveNum('popstate_timestamp',state)
-export const getIsNavigatingHistory = (state: HistoryState):boolean=>state !== null?Boolean(state[getKey('is_navigating_history')]):false
+export const getIsNavigatingHistory = (state: HistoryState):boolean=>state === null?false:Boolean(state[getKey('is_navigating_history')])

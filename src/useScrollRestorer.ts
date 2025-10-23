@@ -146,7 +146,8 @@ const useScrollRestorer = (): void => {
                 scrollMemoCountInInterval.current = defaultMemoInterval
             }
             if (isAllowedNow || scrollMemoCountInInterval.current < scrollMemoIntervalCountLimit) {
-                scrollMemoCountInInterval.current++
+                // eslint-disable-next-line @typescript-eslint/no-magic-numbers -- it's just an increment for each time scroll position is memoized. That number prevents this library from hiting rate limits of `replaceState` APIs 
+                scrollMemoCountInInterval.current += 1
                 rememberScrollPosition(pos)
             } else {
                 console.log(`Scroll memoization is not allowed. ${window.location.href}`)
