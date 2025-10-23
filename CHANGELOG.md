@@ -1,5 +1,13 @@
 # next-scroll-restorer
 
+## 0.10.3
+
+### Patch Changes
+
+- f1bf7c3: Add NextJS 16 support and CI tests on the different NextJS versions.
+- f1bf7c3: Run tests on the IOS Iphone Browser
+- f1bf7c3: Avoid broken playwright version: https://github.com/microsoft/playwright/issues/37766
+
 ## 0.10.2
 
 ### Patch Changes
