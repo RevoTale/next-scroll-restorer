@@ -45,7 +45,7 @@ export default defineConfig({
 
     {
       name: 'webkit',
-      use: { ...devices['Desktop Safari'] },
+      use: { ...devices['iPhone 15 Pro'] },
     },
   ],
 })

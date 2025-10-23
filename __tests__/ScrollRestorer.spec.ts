@@ -12,9 +12,9 @@ const resolveTimeout = (time: number) => (async () => {
 const getScrollY = (page: Page) => page.evaluate((): number => window.scrollY)
 
 const expectScrollToBe = async (page: Page, value: number) => {
-    await resolveTimeout(50)
-    await expect(getScrollY(page)).resolves.toBeGreaterThanOrEqual(value - 2)
-    await expect(getScrollY(page)).resolves.toBeLessThanOrEqual(value + 2)
+    await resolveTimeout(100)
+    await expect(getScrollY(page)).resolves.toBeGreaterThanOrEqual(value - 70) //such a big offset due to iphone search bar
+    await expect(getScrollY(page)).resolves.toBeLessThanOrEqual(value + 70)
 }
 const scrollPage = (page: Page, scrollY: number) => {
     return page.evaluate(async (value) => {
