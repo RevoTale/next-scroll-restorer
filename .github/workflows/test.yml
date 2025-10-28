@@ -30,11 +30,11 @@ jobs:
       - run: pnpm test
         env:
           CI: true
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v5
         with:
           name: my-artifacts-${{inputs.context}}-${{inputs.job-index}}-${{ matrix.node-version }}-${{ strategy.job-index }}
           path: playwright-report/
-      - uses: actions/download-artifact@v5
+      - uses: actions/download-artifact@v6
         with:
           pattern: my-artifacts-${{inputs.context}}*
           merge-multiple: true
