@@ -5,6 +5,7 @@ const nextConfig = {
         // your project has ESLint errors.
         ignoreDuringBuilds: true,
     },
+    outputFileTracingRoot:__dirname
 }
 
 module.exports = nextConfig
