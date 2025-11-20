@@ -12,7 +12,8 @@ import { defineConfig, devices } from '@playwright/test'
 const port = Number(process.env.PORT)||3033
 export default defineConfig({
   webServer: {
-    command: `pnpm -C ./next-app-mock build && pnpm -C ./next-app-mock start --port ${port}`,
+    command: `ls . && pnpm build && pnpm start --port ${port}`,
+    cwd: './next-app-mock',
     port: port
   },
   use: {

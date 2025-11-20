@@ -24,7 +24,8 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: pnpm
-      - run: pnpm i && pnpm build
+      - run: cd next-app-mock && pnpm i
+      - run: pnpm i  && pnpm build
       - run: pnpm add next@^${{ matrix.nextjs-version }}
       - run: pnpm playwright install --with-deps
       - run: pnpm test
