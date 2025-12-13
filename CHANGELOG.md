@@ -1,5 +1,11 @@
 # next-scroll-restorer
 
+## 0.11.0
+
+### Minor Changes
+
+- fdc88f1: Dependencies upgrade. NextJS 16 support.
+
 ## 0.10.3
 
 ### Patch Changes
