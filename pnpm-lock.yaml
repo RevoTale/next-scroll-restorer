@@ -40,8 +40,8 @@ importers:
         specifier: ^9.39.1
         version: 9.39.2
       eslint-config-love:
-        specifier: ^140.0.0
-        version: 140.0.0(@typescript-eslint/parser@8.47.0(eslint@9.39.2)(typescript@5.9.3))(eslint@9.39.2)(typescript@5.9.3)
+        specifier: ^146.0.0
+        version: 146.0.0(@typescript-eslint/parser@8.47.0(eslint@9.39.2)(typescript@5.9.3))(eslint@9.39.2)(typescript@5.9.3)
       tsup:
         specifier: ^8.5.1
         version: 8.5.1(@swc/core@1.15.8)(postcss@8.4.31)(typescript@5.9.3)
@@ -269,6 +269,12 @@ packages:
     engines: {node: '>=18'}
     cpu: [x64]
     os: [win32]
+
+  '@eslint-community/eslint-plugin-eslint-comments@3.2.1':
+    resolution: {integrity: sha512-/HZbjIGaVO2zLlWX3gRgiHmKRVvvqrC0zVu3eXnIj1ORxoyfGSj50l0PfDfqihyZAqrDYzSMdJesXzFjvAoiLQ==}
+    engines: {node: '>=6.5.0'}
+    peerDependencies:
+      eslint: '>=4.19.1'
 
   '@eslint-community/eslint-utils@4.9.0':
     resolution: {integrity: sha512-ayVFHdtZ+hsq1t2Dy24wCmGXGe4q9Gu3smhLYALJrr473ZH27MsnSL+LKUlimp4BWJqMDMLmPpx/Q9R3OAlL4g==}
@@ -1105,8 +1111,8 @@ packages:
     peerDependencies:
       eslint: '>=6.0.0'
 
-  eslint-config-love@140.0.0:
-    resolution: {integrity: sha512-SrYJrCxb47juAGS8NsEe+AoocYX0hZu7MMWMlKtNTDDf4ZPBOECa5Xdf2WNCvgnmQ8vW8RcgsyfD7ulAP5RkjA==}
+  eslint-config-love@146.0.0:
+    resolution: {integrity: sha512-iubmmQ2ctGgyHO1zU+HpRrkPSGiJ4GaqV7Krh80Bs/4hWfutfrRrnCcKQlaDVoAMR+qnaJY4MNSzVBOfndr2Og==}
     peerDependencies:
       eslint: ^9.35.0
       typescript: '*'
@@ -1140,12 +1146,6 @@ packages:
     engines: {node: ^14.18.0 || >=16.0.0}
     peerDependencies:
       eslint: '>=8'
-
-  eslint-plugin-eslint-comments@3.2.0:
-    resolution: {integrity: sha512-0jkOl0hfojIHHmEHgmNdqv4fmh7300NdpA9FFpF7zaoLvB/QeXOGNLIo86oAveJFrfB1p05kC8hpEMHM8DwWVQ==}
-    engines: {node: '>=6.5.0'}
-    peerDependencies:
-      eslint: '>=4.19.1'
 
   eslint-plugin-import@2.32.0:
     resolution: {integrity: sha512-whOE1HFo/qJDyX4SnXzP4N6zOWn79WhnCUY/iDR0mPfQZO8wcYE4JClzI2oZrhBnnMUCBCHZhO6VQyoBU95mZA==}
@@ -2404,6 +2404,12 @@ snapshots:
   '@esbuild/win32-x64@0.27.0':
     optional: true
 
+  '@eslint-community/eslint-plugin-eslint-comments@3.2.1(eslint@9.39.2)':
+    dependencies:
+      escape-string-regexp: 1.0.5
+      eslint: 9.39.2
+      ignore: 5.3.2
+
   '@eslint-community/eslint-utils@4.9.0(eslint@9.39.2)':
     dependencies:
       eslint: 9.39.2
@@ -3235,11 +3241,11 @@ snapshots:
       eslint: 9.39.2
       semver: 7.7.3
 
-  eslint-config-love@140.0.0(@typescript-eslint/parser@8.47.0(eslint@9.39.2)(typescript@5.9.3))(eslint@9.39.2)(typescript@5.9.3):
+  eslint-config-love@146.0.0(@typescript-eslint/parser@8.47.0(eslint@9.39.2)(typescript@5.9.3))(eslint@9.39.2)(typescript@5.9.3):
     dependencies:
+      '@eslint-community/eslint-plugin-eslint-comments': 3.2.1(eslint@9.39.2)
       '@typescript-eslint/utils': 8.47.0(eslint@9.39.2)(typescript@5.9.3)
       eslint: 9.39.2
-      eslint-plugin-eslint-comments: 3.2.0(eslint@9.39.2)
       eslint-plugin-import: 2.32.0(@typescript-eslint/parser@8.47.0(eslint@9.39.2)(typescript@5.9.3))(eslint@9.39.2)
       eslint-plugin-n: 17.23.1(eslint@9.39.2)(typescript@5.9.3)
       eslint-plugin-promise: 7.2.1(eslint@9.39.2)
@@ -3275,12 +3281,6 @@ snapshots:
       '@eslint-community/regexpp': 4.12.2
       eslint: 9.39.2
       eslint-compat-utils: 0.5.1(eslint@9.39.2)
-
-  eslint-plugin-eslint-comments@3.2.0(eslint@9.39.2):
-    dependencies:
-      escape-string-regexp: 1.0.5
-      eslint: 9.39.2
-      ignore: 5.3.2
 
   eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.47.0(eslint@9.39.2)(typescript@5.9.3))(eslint@9.39.2):
     dependencies:
