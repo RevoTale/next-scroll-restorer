@@ -1,6 +1,6 @@
-import ClientSideScrollRestorer from '@/ClientSideScrollRestorer';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
+import ClientSideScrollRestorer from '@/ClientSideScrollRestorer';
 import './globals.css';
 import { type FunctionComponent, type ReactNode, Suspense } from 'react';
 

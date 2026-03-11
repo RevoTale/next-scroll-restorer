@@ -1,6 +1,5 @@
 import type { Page } from '@playwright/test';
-import { test } from '@playwright/test';
-import { expect } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 
 const highPage = 1300;
 const mainPage = 2600;

@@ -1,12 +1,15 @@
 import Link from 'next/link';
+
 import { connection } from 'next/server';
 import { Suspense } from 'react';
 import SomeClient from './SomeClient';
+
 function delay(ms: number) {
 	return new Promise((resolve) => {
 		setTimeout(resolve, ms);
 	});
 }
+
 const Page = async () => {
 	await connection();
 	await delay(1000);
