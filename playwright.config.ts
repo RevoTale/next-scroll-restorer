@@ -1,4 +1,4 @@
-import { defineConfig, devices } from '@playwright/test'
+import { defineConfig, devices } from '@playwright/test';
 
 /**
  * Read environment variables from file.
@@ -9,44 +9,43 @@ import { defineConfig, devices } from '@playwright/test'
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
-const port = Number(process.env.PORT)||3033
+const port = Number(process.env.PORT) || 3033;
 export default defineConfig({
-  webServer: {
-    command: `ls . && pnpm build && pnpm start --port ${port}`,
-    cwd: './next-app-mock',
-    port: port
-  },
-  use: {
-    baseURL: `http://127.0.0.1:${port}`,
-    trace: 'on-first-retry',
-  },
-  testDir: './__tests__',
-  /* Run tests in files in parallel */
-  fullyParallel: true,
-  /* Fail the build on CI if you accidentally left test.only in the source code. */
-  forbidOnly: !!process.env.CI,
-  /* Retry on CI only */
-  retries: process.env.CI ? 2 : 0,
-  /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: [ ['html', { open: 'never' }] ],
-  /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
+	webServer: {
+		command: `ls . && pnpm build && pnpm start --port ${port}`,
+		cwd: './next-app-mock',
+		port: port,
+	},
+	use: {
+		baseURL: `http://127.0.0.1:${port}`,
+		trace: 'on-first-retry',
+	},
+	testDir: './__tests__',
+	/* Run tests in files in parallel */
+	fullyParallel: true,
+	/* Fail the build on CI if you accidentally left test.only in the source code. */
+	forbidOnly: !!process.env.CI,
+	/* Retry on CI only */
+	retries: process.env.CI ? 2 : 0,
+	/* Reporter to use. See https://playwright.dev/docs/test-reporters */
+	reporter: [['html', { open: 'never' }]],
+	/* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
 
+	/* Configure projects for major browsers */
+	projects: [
+		{
+			name: 'chromium',
+			use: { ...devices['Desktop Chrome'] },
+		},
 
-  /* Configure projects for major browsers */
-  projects: [
-    {
-      name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
-    },
+		{
+			name: 'firefox',
+			use: { ...devices['Desktop Firefox'] },
+		},
 
-    {
-      name: 'firefox',
-      use: { ...devices['Desktop Firefox'] },
-    },
-
-    {
-      name: 'webkit',
-      use: { ...devices['iPhone 15 Pro'] },
-    },
-  ],
-})
+		{
+			name: 'webkit',
+			use: { ...devices['iPhone 15 Pro'] },
+		},
+	],
+});

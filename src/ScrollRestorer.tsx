@@ -1,9 +1,9 @@
-'use client'
-import type { FunctionComponent } from "react"
-import useScrollRestorer from "./useScrollRestorer"
+'use client';
+import type { FunctionComponent } from 'react';
+import useScrollRestorer from './useScrollRestorer';
 
-const ScrollRestoration:FunctionComponent = () => {
-    useScrollRestorer()
-    return <></>
-}
-export default ScrollRestoration
+const ScrollRestoration: FunctionComponent = () => {
+	useScrollRestorer();
+	return <></>;
+};
+export default ScrollRestoration;

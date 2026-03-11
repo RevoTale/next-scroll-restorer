@@ -12,20 +12,20 @@
 		"enabled": true,
 		"indentStyle": "tab"
 	},
-	
+
 	"linter": {
 		"enabled": true,
 		"rules": {
 			"recommended": true,
-			"a11y":      { "recommended": true },
-			"complexity":{ "recommended": true },
+			"a11y": { "recommended": true },
+			"complexity": { "recommended": true },
 			"correctness": { "recommended": true }
 		},
-			
+
 		"domains": {
 			"react": "recommended",
 			"next": "recommended",
-			"types": "all"   
+			"types": "all"
 		}
 	},
 	"javascript": {
