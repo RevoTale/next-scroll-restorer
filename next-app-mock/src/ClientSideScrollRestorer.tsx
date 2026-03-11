@@ -1,7 +1,7 @@
-'use client'
-import {ScrollRestorer} from "../../dist"
+'use client';
+import { ScrollRestorer } from '../../dist';
 
 const ClientSideScrollRestorer = () => {
-    return <ScrollRestorer />
-}
-export default ClientSideScrollRestorer
+	return <ScrollRestorer />;
+};
+export default ClientSideScrollRestorer;

@@ -1,68 +1,67 @@
 {
-  "author": {
-    "name": "l-you",
-    "email": "l-you@revotale.com",
-    "url": "https://github.com/l-you"
-  },
-  "version": "0.11.0",
-  "name": "next-scroll-restorer",
-  "main": "src/index.ts",
-  "license": "MIT",
-  "private": false,
-  "sideEffects": false,
-  "publishConfig": {
-    "provenance": true,
-    "access": "public",
-    "main": "index.js",
-    "directory": "dist",
-    "exports": {
-      "./package.json": "./package.json",
-      ".": {
-        "import": "./index.js",
-        "require": "./index.cjs",
-        "types": "./index.d.ts"
-      }
-    }
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/RevoTale/next-scroll-restorer.git"
-  },
-  "type": "module",
-  "scripts": {
-    "build": "tsup && cp package.json README.md LICENSE dist/",
-    "tsc": "tsc --noEmit",
-    "changeset:version": "changeset version && git add --all",
-    "changeset:publish": "changeset publish",
-    "prepare": "pnpm build",
-    "test": "pnpm lint && pnpm tsc && pnpm unit",
-    "unit": "playwright test",
-    "lint": "eslint .",
-    "lint:fix": "eslint --fix ."
-  },
-  "bugs": {
-    "url": "https://github.com/RevoTale/next-scroll-restorer/issues"
-  },
-  "devDependencies": {
-    "@changesets/cli": "^2.29.7",
-    "@playwright/test": "1.58.2",
-    "@swc/core": "^1.15.2",
-    "@types/node": "^24.10.1",
-    "@types/react": "^19.2.6",
-    "changeset": "^0.2.6",
-    "eslint": "^9.39.1",
-    "eslint-config-love": "^151.0.0",
-    "tsup": "^8.5.1",
-    "typescript": "^5.9.3"
-  },
-  "pnpm": {
-    "overrides": {
-      "@playwright/test": "1.58.2"
-    }
-  },
-  "peerDependencies": {
-    "next": "^15.0 || ^16.0.0",
-    "react": "^19.0"
-  },
-  "packageManager": "pnpm@10.32.1"
+	"author": {
+		"name": "l-you",
+		"email": "l-you@revotale.com",
+		"url": "https://github.com/l-you"
+	},
+	"version": "0.11.0",
+	"name": "next-scroll-restorer",
+	"main": "src/index.ts",
+	"license": "MIT",
+	"private": false,
+	"sideEffects": false,
+	"publishConfig": {
+		"provenance": true,
+		"access": "public",
+		"main": "index.js",
+		"directory": "dist",
+		"exports": {
+			"./package.json": "./package.json",
+			".": {
+				"import": "./index.js",
+				"require": "./index.cjs",
+				"types": "./index.d.ts"
+			}
+		}
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/RevoTale/next-scroll-restorer.git"
+	},
+	"type": "module",
+	"scripts": {
+		"build": "tsup && cp package.json README.md LICENSE dist/",
+		"tsc": "tsc --noEmit",
+		"changeset:version": "changeset version && git add --all",
+		"changeset:publish": "changeset publish",
+		"prepare": "pnpm build",
+		"test": "pnpm lint && pnpm tsc && pnpm unit",
+		"unit": "playwright test",
+		"lint": "pnpx @biomejs/biome check",
+		"lint:fix": "pnpx @biomejs/biome format --write"
+	},
+	"bugs": {
+		"url": "https://github.com/RevoTale/next-scroll-restorer/issues"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "2.4.6",
+		"@changesets/cli": "^2.30.0",
+		"@playwright/test": "1.58.2",
+		"@swc/core": "^1.15.18",
+		"@types/node": "^24.12.0",
+		"@types/react": "^19.2.14",
+		"changeset": "^0.2.6",
+		"tsup": "^8.5.1",
+		"typescript": "^5.9.3"
+	},
+	"pnpm": {
+		"overrides": {
+			"@playwright/test": "1.58.2"
+		}
+	},
+	"peerDependencies": {
+		"next": "^15.0 || ^16.0",
+		"react": "^19.0"
+	},
+	"packageManager": "pnpm@10.32.1"
 }
