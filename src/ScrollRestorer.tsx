@@ -4,6 +4,6 @@ import useScrollRestorer from './useScrollRestorer';
 
 const ScrollRestoration: FunctionComponent = () => {
 	useScrollRestorer();
-	return <></>;
+	return null;
 };
 export default ScrollRestoration;

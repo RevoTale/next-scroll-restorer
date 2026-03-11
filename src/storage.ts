@@ -24,7 +24,7 @@ export const setCurrentScrollHistory = ([x, y]: ScrollPos): void => {
 			...newState,
 			[getKey('x')]: normX,
 			[getKey('y')]: normY,
-			[getKey('memo_timestamp')]: new Date().getTime(),
+			[getKey('memo_timestamp')]: Date.now(),
 		},
 		'',
 	);
@@ -39,7 +39,7 @@ const retrieveNum = (name: HistoryKeys, state: HistoryState): number | null => {
 		return null;
 	}
 	const num = Number(value);
-	return isNaN(num) ? null : num;
+	return Number.isNaN(num) ? null : num;
 };
 export const getScrollFromState = (state: HistoryState): ScrollPos | null => {
 	const x = retrieveNum('x', state);

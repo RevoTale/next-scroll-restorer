@@ -1,6 +1,5 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { clearInterval } from 'timers';
 
 const SomeClient = () => {
 	const [i, setI] = useState(0);

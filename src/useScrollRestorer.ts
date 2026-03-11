@@ -1,4 +1,3 @@
-/* eslint-disable no-console -- console required for debugging. Its dropped with bundler on production. */
 import { usePathname, useSearchParams } from 'next/navigation';
 import { useEffect, useLayoutEffect, useRef } from 'react';
 import {
@@ -52,6 +51,7 @@ const useScrollRestorer = (): void => {
 	const pathname = usePathname();
 	const searchparams = useSearchParams();
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: We need a trigger to remember the scrollposition on any url change
 	useLayoutEffect(() => {
 		console.log('Restoring based on hooks.');
 		restoreCurrentScrollPosition();
@@ -72,7 +72,7 @@ const useScrollRestorer = (): void => {
 				{
 					...state,
 					[getKey('is_navigating_history')]: numericTrue,
-					[getKey('popstate_timestamp')]: new Date().getTime(),
+					[getKey('popstate_timestamp')]: Date.now(),
 				},
 				'',
 			);
@@ -102,10 +102,7 @@ const useScrollRestorer = (): void => {
 					if (timeNavigated === null) {
 						return false;
 					}
-					return (
-						new Date().getTime() - timeNavigated <
-						safariBugWorkaroundTimeThreshold
-					);
+					return Date.now() - timeNavigated < safariBugWorkaroundTimeThreshold;
 				})(); //Place here to prevent many computations
 				const isNavHistory = getIsNavigatingHistory(state);
 				console.log(
@@ -158,7 +155,7 @@ const useScrollRestorer = (): void => {
 				if (timestamp === null) {
 					return true;
 				}
-				return new Date().getTime() - timestamp > memoizationIntervalLimit;
+				return Date.now() - timestamp > memoizationIntervalLimit;
 			};
 
 			const isAllowedNow = isScrollMemoAllowedNow();

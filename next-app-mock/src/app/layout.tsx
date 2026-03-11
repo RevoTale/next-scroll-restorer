@@ -2,7 +2,7 @@ import ClientSideScrollRestorer from '@/ClientSideScrollRestorer';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
-import { FunctionComponent, ReactNode, Suspense } from 'react';
+import { type FunctionComponent, type ReactNode, Suspense } from 'react';
 
 const inter = Inter({ subsets: ['latin'] });
 
