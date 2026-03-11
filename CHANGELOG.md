@@ -1,5 +1,11 @@
 # next-scroll-restorer
 
+## 0.11.1
+
+### Patch Changes
+
+- 8ec5ece: Migrate from ESLint to Biome for linting. CI on Node v25. All PNPM tooling packages bumped to the latest version. Code quality fixes.
+
 ## 0.11.0
 
 ### Minor Changes
