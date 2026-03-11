@@ -37,21 +37,20 @@
     "prepare": "pnpm build",
     "test": "pnpm lint && pnpm tsc && pnpm unit",
     "unit": "playwright test",
-    "lint": "eslint .",
-    "lint:fix": "eslint --fix ."
+    "lint": "pnpx @biomejs/biome check",
+    "lint:fix": "pnpx @biomejs/biome format --write"
   },
   "bugs": {
     "url": "https://github.com/RevoTale/next-scroll-restorer/issues"
   },
   "devDependencies": {
+    "@biomejs/biome": "2.4.6",
     "@changesets/cli": "^2.30.0",
     "@playwright/test": "1.58.2",
     "@swc/core": "^1.15.18",
     "@types/node": "^24.12.0",
     "@types/react": "^19.2.14",
     "changeset": "^0.2.6",
-    "eslint": "^9.39.4",
-    "eslint-config-love": "^151.0.0",
     "tsup": "^8.5.1",
     "typescript": "^5.9.3"
   },

@@ -2,7 +2,10 @@
     "image": "mcr.microsoft.com/devcontainers/typescript-node:24",
     "customizations": {
         "vscode": {
-            "extensions": ["GitHub.vscode-pull-request-github"]
+            "extensions": [
+                "GitHub.vscode-pull-request-github",
+                "biomejs.biome"
+            ]
         }
     }
 }
