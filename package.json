@@ -44,13 +44,13 @@
     "url": "https://github.com/RevoTale/next-scroll-restorer/issues"
   },
   "devDependencies": {
-    "@changesets/cli": "^2.29.7",
+    "@changesets/cli": "^2.30.0",
     "@playwright/test": "1.58.2",
-    "@swc/core": "^1.15.2",
-    "@types/node": "^24.10.1",
-    "@types/react": "^19.2.6",
+    "@swc/core": "^1.15.18",
+    "@types/node": "^24.12.0",
+    "@types/react": "^19.2.14",
     "changeset": "^0.2.6",
-    "eslint": "^9.39.1",
+    "eslint": "^9.39.4",
     "eslint-config-love": "^151.0.0",
     "tsup": "^8.5.1",
     "typescript": "^5.9.3"
