@@ -19,7 +19,7 @@ jobs:
         os: [ubuntu-latest]
     steps:
       - uses: actions/checkout@v6
-      - uses: pnpm/action-setup@v4.3.0
+      - uses: pnpm/action-setup@v5.0.0
       - uses: actions/setup-node@v6
         with:
           node-version: ${{ matrix.node-version }}
@@ -55,7 +55,7 @@ jobs:
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v6
-      - uses: pnpm/action-setup@v4.3.0
+      - uses: pnpm/action-setup@v5.0.0
       - uses: actions/setup-node@v6
         with:
           node-version: 24
