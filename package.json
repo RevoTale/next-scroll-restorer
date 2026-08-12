@@ -37,8 +37,8 @@
 		"prepare": "pnpm build",
 		"test": "pnpm lint && pnpm tsc && pnpm unit",
 		"unit": "playwright test",
-		"lint": "pnpx @biomejs/biome check",
-		"lint:fix": "pnpx @biomejs/biome format --write"
+		"lint": "biome check",
+		"lint:fix": "biome format --write"
 	},
 	"bugs": {
 		"url": "https://github.com/RevoTale/next-scroll-restorer/issues"
