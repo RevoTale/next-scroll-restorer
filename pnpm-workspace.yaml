@@ -1,0 +1,7 @@
+overrides:
+  '@playwright/test': 1.58.2
+
+allowBuilds:
+  '@swc/core': true
+  esbuild: true
+  sharp: true
