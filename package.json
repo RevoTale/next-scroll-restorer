@@ -54,11 +54,6 @@
 		"tsup": "^8.5.1",
 		"typescript": "^5.9.3"
 	},
-	"pnpm": {
-		"overrides": {
-			"@playwright/test": "1.58.2"
-		}
-	},
 	"peerDependencies": {
 		"next": "^15.0 || ^16.0",
 		"react": "^19.0"
