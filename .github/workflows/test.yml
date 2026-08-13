@@ -14,7 +14,7 @@ jobs:
     timeout-minutes: 15
     strategy:
       matrix:
-        node-version: [20,22,25]
+        node-version: [22,24,26]
         nextjs-version: [15,16]
         os: [ubuntu-latest]
     steps:
@@ -27,7 +27,8 @@ jobs:
       - run: cd next-app-mock && pnpm i
       - run: pnpm i  && pnpm build
       - run: pnpm add next@^${{ matrix.nextjs-version }}
-      - run: pnpm playwright install --with-deps
+      - name: Install Playwright browsers
+        run: pnpm playwright install --with-deps
       - run: pnpm test
         env:
           CI: true
@@ -47,7 +48,7 @@ jobs:
       - name: Setup Biome
         uses: biomejs/setup-biome@v2
         with:
-          version: latest
+          version: 2.4.6
       - name: Run Biome
         run: biome ci .
   Types:

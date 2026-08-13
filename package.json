@@ -37,8 +37,8 @@
 		"prepare": "pnpm build",
 		"test": "pnpm lint && pnpm tsc && pnpm unit",
 		"unit": "playwright test",
-		"lint": "pnpx @biomejs/biome check",
-		"lint:fix": "pnpx @biomejs/biome format --write"
+		"lint": "biome check",
+		"lint:fix": "biome format --write"
 	},
 	"bugs": {
 		"url": "https://github.com/RevoTale/next-scroll-restorer/issues"
@@ -46,7 +46,7 @@
 	"devDependencies": {
 		"@biomejs/biome": "2.4.6",
 		"@changesets/cli": "^2.30.0",
-		"@playwright/test": "1.58.2",
+		"@playwright/test": "1.62.1",
 		"@swc/core": "^1.15.18",
 		"@types/node": "^24.12.0",
 		"@types/react": "^19.2.14",
@@ -54,14 +54,9 @@
 		"tsup": "^8.5.1",
 		"typescript": "^5.9.3"
 	},
-	"pnpm": {
-		"overrides": {
-			"@playwright/test": "1.58.2"
-		}
-	},
 	"peerDependencies": {
 		"next": "^15.0 || ^16.0",
 		"react": "^19.0"
 	},
-	"packageManager": "pnpm@10.32.1"
+	"packageManager": "pnpm@11.21.0"
 }
