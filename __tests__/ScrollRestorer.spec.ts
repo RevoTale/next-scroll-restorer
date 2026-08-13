@@ -64,7 +64,7 @@ const initTests = async (page: Page) => {
 	await expectScrollToBe(page, 0);
 	await page.goBack();
 };
-test('End to end testing of scroll restorer', async ({ page, browserName }) => {
+test('End to end testing of scroll restorer', async ({ page }) => {
 	await initTests(page);
 	await expect(page).toHaveURL('/');
 	await resolveTimeout(1000); //Check if Next.js does not brake scroll position later
@@ -122,9 +122,6 @@ test('End to end testing of scroll restorer', async ({ page, browserName }) => {
 	await expectScrollToBe(page, mainPage);
 
 	await page.reload();
-	if (browserName === 'firefox') {
-		await page.goBack(); //Firefox pushed new history entry history after reload https://github.com/microsoft/playwright/issues/22640
-	}
 	await resolveTimeout(1000); //Sometimes browsers struggle to restore the same millisecond
 	await expectScrollToBe(page, mainPage);
 

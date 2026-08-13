@@ -28,24 +28,7 @@ jobs:
       - run: pnpm i  && pnpm build
       - run: pnpm add next@^${{ matrix.nextjs-version }}
       - name: Install Playwright browsers
-        if: ${{ matrix.node-version != 26 }}
         run: pnpm playwright install --with-deps
-      # Playwright 1.58 hangs while extracting browsers under Node 26.
-      - name: Use Node 24 for Playwright browser installation
-        if: ${{ matrix.node-version == 26 }}
-        uses: actions/setup-node@v6
-        with:
-          node-version: 24
-          cache: pnpm
-      - name: Install Playwright browsers for Node 26 tests
-        if: ${{ matrix.node-version == 26 }}
-        run: pnpm playwright install --with-deps
-      - name: Restore Node 26 for tests
-        if: ${{ matrix.node-version == 26 }}
-        uses: actions/setup-node@v6
-        with:
-          node-version: 26
-          cache: pnpm
       - run: pnpm test
         env:
           CI: true
