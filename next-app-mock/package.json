@@ -5,7 +5,8 @@
 	"scripts": {
 		"dev": "next dev",
 		"build": "next build",
-		"start": "next start"
+		"start": "next start",
+		"typecheck": "./node_modules/@typescript/native/bin/tsc --noEmit"
 	},
 	"dependencies": {
 		"next": "^15.4.7 || ^16.0",
@@ -16,6 +17,7 @@
 		"@types/node": "^24.0.0",
 		"@types/react": "^19.1.4",
 		"@types/react-dom": "^19.2",
-		"typescript": "^5.8.3"
+		"@typescript/native": "npm:typescript@^7.0.2",
+		"typescript": "5.9.3"
 	}
 }

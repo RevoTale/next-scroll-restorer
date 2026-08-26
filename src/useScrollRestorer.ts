@@ -121,7 +121,6 @@ const useScrollRestorer = (): void => {
 			return false;
 		};
 		const rememberScrollPosition = (pos: ScrollPos): void => {
-			// eslint-disable-next-line @typescript-eslint/no-magic-numbers -- it's stale index
 			console.log(
 				`Remember history scroll to ${pos[0]} ${pos[1]}. Href ${window.location.href}.`,
 			);
@@ -167,7 +166,6 @@ const useScrollRestorer = (): void => {
 				isAllowedNow ||
 				scrollMemoCountInInterval.current < scrollMemoIntervalCountLimit
 			) {
-				// eslint-disable-next-line @typescript-eslint/no-magic-numbers -- it's just an increment for each time scroll position is memoized. That number prevents this library from hiting rate limits of `replaceState` APIs
 				scrollMemoCountInInterval.current += 1;
 				rememberScrollPosition(pos);
 			} else {
@@ -175,7 +173,6 @@ const useScrollRestorer = (): void => {
 					`Scroll memoization is not allowed. ${window.location.href}`,
 				);
 				if (scrollMemoTimeoutRef.current === undefined) {
-					// eslint-disable-next-line @typescript-eslint/no-magic-numbers -- it's just a fixed index
 					console.log(`Set delayed memoization ${pos[0]} ${pos[1]}`);
 					scrollMemoTimeoutRef.current = setTimeout(() => {
 						rememberScrollPosition(pos);
