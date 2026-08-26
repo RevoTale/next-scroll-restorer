@@ -4,20 +4,19 @@
 	"private": true,
 	"scripts": {
 		"dev": "next dev",
-		"build": "next build",
+		"build": "rm -rf .next && next build",
 		"start": "next start",
-		"typecheck": "./node_modules/@typescript/native/bin/tsc --noEmit"
+		"typecheck": "tsc --noEmit"
 	},
 	"dependencies": {
-		"next": "^15.4.7 || ^16.0",
-		"react": "^19.2.0",
-		"react-dom": "^19.2.0"
+		"next": "^16.3.3",
+		"react": "^19.2.8",
+		"react-dom": "^19.2.8"
 	},
 	"devDependencies": {
-		"@types/node": "^24.0.0",
-		"@types/react": "^19.1.4",
-		"@types/react-dom": "^19.2",
-		"@typescript/native": "npm:typescript@^7.0.2",
-		"typescript": "5.9.3"
+		"@types/node": "^26.3.0",
+		"@types/react": "^19.2.18",
+		"@types/react-dom": "^19.2.5",
+		"typescript": "7.0.2"
 	}
 }

@@ -30,8 +30,8 @@
 	},
 	"type": "module",
 	"scripts": {
-		"build": "tsup --tsconfig tsconfig.tsup.json && cp package.json README.md LICENSE dist/",
-		"tsc": "./node_modules/@typescript/native/bin/tsc --noEmit",
+		"build": "tsdown && cp package.json README.md LICENSE dist/",
+		"tsc": "tsc --noEmit",
 		"changeset:version": "changeset version && git add --all",
 		"changeset:publish": "changeset publish",
 		"prepare": "pnpm build",
@@ -45,19 +45,20 @@
 	},
 	"devDependencies": {
 		"@biomejs/biome": "2.5.10",
-		"@changesets/cli": "^3.0.0",
+		"@changesets/cli": "^3.0.1",
 		"@playwright/test": "1.62.1",
-		"@swc/core": "^1.15.18",
-		"@types/node": "^24.12.0",
-		"@types/react": "^19.2.14",
-		"@typescript/native": "npm:typescript@^7.0.2",
+		"@swc/core": "^1.16.1",
+		"@types/node": "^26.3.0",
+		"@types/react": "^19.2.18",
 		"changeset": "^0.2.6",
-		"tsup": "^8.5.1",
-		"typescript": "npm:@typescript/typescript6@^6.0.2"
+		"next": "^16.3.3",
+		"react": "^19.2.8",
+		"tsdown": "^0.22.14",
+		"typescript": "7.0.2"
 	},
 	"peerDependencies": {
 		"next": "^15.0 || ^16.0",
 		"react": "^19.0"
 	},
-	"packageManager": "pnpm@11.21.0"
+	"packageManager": "pnpm@11.23.0"
 }
