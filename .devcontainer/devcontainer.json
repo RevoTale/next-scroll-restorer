@@ -1,5 +1,5 @@
 {
-	"image": "mcr.microsoft.com/devcontainers/typescript-node:24",
+	"image": "mcr.microsoft.com/devcontainers/typescript-node:5-24-trixie",
 	"customizations": {
 		"vscode": {
 			"extensions": ["GitHub.vscode-pull-request-github", "biomejs.biome"]
