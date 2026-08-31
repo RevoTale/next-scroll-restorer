@@ -60,5 +60,5 @@
 		"next": "^15.0 || ^16.0",
 		"react": "^19.0"
 	},
-	"packageManager": "pnpm@11.23.0"
+	"packageManager": "pnpm@11.24.0"
 }
