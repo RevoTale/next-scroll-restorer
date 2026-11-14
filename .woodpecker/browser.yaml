@@ -14,7 +14,7 @@ steps:
       CI: 'true'
     commands:
       - npm install --global --prefix /tmp/ci-node node@${NODE_VERSION} pnpm@12.3.1
-      - export PATH=/tmp/ci-node/bin:\$PATH
+      - export PATH=/tmp/ci-node/bin:$PATH
       - test "$$(node --version)" = 'v${NODE_VERSION}'
       - pnpm --dir next-app-mock install --frozen-lockfile
       - pnpm install --frozen-lockfile
