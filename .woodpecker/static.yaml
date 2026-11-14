@@ -1,0 +1,13 @@
+when:
+  - event: push
+  - event: pull_request
+    branch: main
+
+steps:
+  - name: lint-and-types
+    image: node:24-bookworm@sha256:9d266751ca3d7fdbe651c878ffd5ad0a42fed49a18c283509267c97f025b7496
+    commands:
+      - npm install --global pnpm@12.3.1
+      - pnpm install --frozen-lockfile
+      - pnpm exec biome ci .
+      - pnpm tsc
