@@ -18,7 +18,11 @@ steps:
       - test "$$(node --version)" = 'v${NODE_VERSION}'
       - pnpm install --frozen-lockfile
       - pnpm build
-      - pnpm --dir next-app-mock add "next@^${NEXT}"
+      - |
+        pnpm --dir next-app-mock add "next@^${NEXT}"
+        if [ "${NEXT}" = '15' ]; then
+          pnpm --dir next-app-mock add --save-dev 'typescript@^6'
+        fi
       - pnpm --dir next-app-mock exec node -p "require('next/package.json').version"
       - pnpm add "next@^${NEXT}"
       - pnpm test
