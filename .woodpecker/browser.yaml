@@ -20,6 +20,8 @@ steps:
       - pnpm --dir next-app-mock install --frozen-lockfile
       - pnpm install --frozen-lockfile
       - pnpm build
+      - pnpm --dir next-app-mock add "next@^${NEXT}"
+      - pnpm --dir next-app-mock exec node -p "require('next/package.json').version"
       - pnpm add "next@^${NEXT}"
       - pnpm playwright install --with-deps
       - pnpm test
