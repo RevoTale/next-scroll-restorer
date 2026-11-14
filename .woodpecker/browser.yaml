@@ -4,24 +4,21 @@ when:
     branch: main
 
 matrix:
-  NODE_IMAGE:
-    - node:22-bookworm@sha256:e13726ca604184d7a91fcacab1fc09eefd642dc28e79ac34e85540dd93b78cfb
-    - node:24-bookworm@sha256:9d266751ca3d7fdbe651c878ffd5ad0a42fed49a18c283509267c97f025b7496
-    - node:26-bookworm@sha256:b7087bc4d973034b30854b378ba107f9fab622b47514cb7e2592e41b8bab8d49
+  NODE_VERSION: ["22.23.5", "24.22.3", "26.13.1"]
   NEXT: ['15', '16']
 
 steps:
   - name: browser-tests
-    image: ${NODE_IMAGE}
+    image: mcr.microsoft.com/playwright:v1.62.1-noble@sha256:dcc5531e97840b9b5e794f2814476b21571c5124a3fca2267d73041f56e7580e
     environment:
       CI: 'true'
     commands:
-      - npm install --global pnpm@12.3.1
+      - npm install --global node@${NODE_VERSION} pnpm@12.3.1
+      - test "$$(node --version)" = 'v${NODE_VERSION}'
       - pnpm --dir next-app-mock install --frozen-lockfile
       - pnpm install --frozen-lockfile
       - pnpm build
       - pnpm --dir next-app-mock add "next@^${NEXT}"
       - pnpm --dir next-app-mock exec node -p "require('next/package.json').version"
       - pnpm add "next@^${NEXT}"
-      - pnpm playwright install --with-deps
       - pnpm test
